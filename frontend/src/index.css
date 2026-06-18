@@ -1,0 +1,285 @@
+/* =========================
+   ROOT THEME VARIABLES
+========================= */
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow: rgba(0, 0, 0, 0.08) 0 4px 6px -1px;
+  /* Ombre réduite */
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/140% var(--sans);
+  /* Réduit de 18px à 16px par défaut */
+  letter-spacing: 0.1px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* =========================
+   MOBILE FONT (PLUS PETIT)
+========================= */
+@media (max-width: 1024px) {
+  :root {
+    font-size: 14px;
+    /* Réduit à 14px pour un affichage dense sur téléphone */
+  }
+}
+
+/* =========================
+   DARK MODE
+========================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow: rgba(0, 0, 0, 0.3) 0 4px 6px -1px;
+  }
+}
+
+/* =========================
+   GLOBAL RESET FIX MOBILE
+========================= */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* =========================
+   TYPOGRAPHY (FORMAT MINI)
+========================= */
+h1,
+h2,
+h3 {
+  font-family: var(--heading);
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0;
+}
+
+h1 {
+  font-size: 38px;
+  /* Réduit */
+  letter-spacing: -1px;
+  margin: 16px 0;
+  line-height: 1.1;
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 26px;
+    margin: 12px 0;
+  }
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1024px) {
+  h2 {
+    font-size: 18px;
+  }
+}
+
+p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 2px 6px;
+  background: var(--code-bg);
+  border-radius: 4px;
+}
+
+/* ===================================================
+   🆕 BARRE DE NAVIGATION HORIZONTALE DÉFILANTE (SWIPE)
+====================================================== */
+.top-navbar {
+  width: 100%;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+
+  /* 🔥 Force les éléments à rester alignés et active le scroll horizontal */
+  overflow-x: auto;
+  white-space: nowrap;
+
+  /* Supprime les rebonds rigides sur iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Masque la barre de défilement pour garder un design propre (Chrome/Safari/Edge) */
+.top-navbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Masque la barre de défilement pour Firefox */
+.top-navbar {
+  scrollbar-width: none;
+}
+
+/* Style des boutons/liens du menu horizontal */
+.nav-item {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--social-bg);
+  border-radius: 16px;
+  /* Format pilule/badge */
+  transition: all 0.2s ease;
+}
+
+/* Changement de couleur au clic ou survol */
+.nav-item:active,
+.nav-item:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+/* ===================================================
+   ⚙️ PATCH COMPACT MOBILE (ViteVendu)
+====================================================== */
+
+/* 1. Menus et Liens plus serrés */
+.nav-links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* Moins d'espace */
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .nav-links-container {
+    flex-direction: row;
+    /* Reste en ligne plutôt qu'en colonne géante */
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+}
+
+/* 2. Grille de catalogue condensée */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 🔥 PASSE EN 2 COLONNES sur mobile pour gagner de la place ! */
+  gap: 10px;
+  /* Espace minimal entre les cartes */
+  width: 100%;
+  padding: 10px;
+}
+
+@media (min-width: 768px) {
+  .catalog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .catalog-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 3. Cartes d'annonces format "Mini" */
+.product-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  /* Coins légèrement plus carrés */
+  padding: 10px;
+  /* Moins de vide interne */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  /* Écrit plus petit */
+}
+
+.product-card h3 {
+  font-size: 14px;
+  /* Titre du produit discret */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Coupe le texte proprement s'il est trop long */
+}
+
+.product-card .price {
+  font-weight: 700;
+  color: #10b981;
+  margin: 4px 0;
+}
+
+/* Boutons d'action compacts */
+.card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.card-actions button {
+  flex: 1;
+  padding: 6px 4px;
+  /* Boutons moins épais */
+  border-radius: 6px;
+  font-size: 11px;
+  /* Texte bouton plus petit */
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+}

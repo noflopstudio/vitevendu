@@ -1,0 +1,6 @@
+{
+  "appId": "com.vitevendu.app",
+  "appName": "Vite Vendu",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

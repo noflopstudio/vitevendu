@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Vite Vendu</string>
+    <string name="title_activity_main">Vite Vendu</string>
+    <string name="package_name">com.vitevendu.app</string>
+    <string name="custom_url_scheme">com.vitevendu.app</string>
+</resources>

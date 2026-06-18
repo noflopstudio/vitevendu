@@ -1,0 +1,5 @@
+const playSound = () => {
+  const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+  audio.volume = 1;
+  audio.play();
+};

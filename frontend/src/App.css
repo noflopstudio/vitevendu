@@ -1,0 +1,350 @@
+/* ===================================================
+   📦 RESET GLOBAL ET VARIABLES
+====================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  /* 🔥 Force la hauteur complète de l'écran du téléphone */
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* 🔥 Autorise le défilement vertical si le catalogue est long */
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-overflow-scrolling: touch;
+  /* Défilement fluide sur iPhone */
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  background: var(--bg, #fff);
+  color: var(--text, #000);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container principal de React */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.dashboard-layout {
+  display: flex;
+  flex-direction: row;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-sidebar {
+  width: 310px;
+  min-width: 310px;
+  /* Empêche la sidebar de se faire écraser */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 50px 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 28px;
+  width: 100%;
+}
+
+/* Conteneur secondaire / Catalogue simple */
+.dashboard-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* ===================================================
+   📦 DESIGN DES CARTES PRODUITS (VITEVENDU STYLE)
+====================================================== */
+.product-card {
+  background: #fff;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Mode sombre automatique pour les cartes */
+@media (prefers-color-scheme: dark) {
+  .product-card {
+    background: #1e1f26;
+    border-color: #2e303a;
+  }
+}
+
+.product-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h, #08060d);
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #10b981;
+  /* Joli vert pour le prix en FCFA */
+}
+
+.product-desc {
+  font-size: 14px;
+  color: var(--text, #6b6375);
+}
+
+/* Actions des cartes */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  /* Aligne les boutons tout en bas de la carte */
+  padding-top: 12px;
+}
+
+.card-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-edit {
+  background: #aa3bff;
+  color: white;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+}
+
+/* ===================================================
+   ✨ COMPOSANTS SECONDAIRES & ANIMATIONS
+====================================================== */
+.counter {
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.hero .base {
+  width: 140px;
+}
+
+.hero .framework,
+.hero .vite {
+  margin-top: 10px;
+  display: block;
+  position: static;
+  transform: none;
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+}
+
+#next-steps {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border, #e5e4e7);
+  width: 100%;
+}
+
+#next-steps>div {
+  flex: 1;
+  min-width: 260px;
+  padding: 20px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+#next-steps ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+#next-steps ul a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--social-bg, #f4f3ec);
+  color: var(--text-h, #08060d);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#spacer {
+  height: 40px;
+  border-top: 1px solid var(--border, #e5e4e7);
+}
+
+.ticks {
+  position: relative;
+}
+
+.ticks::before,
+.ticks::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  border: 5px solid transparent;
+}
+
+.ticks::before {
+  left: 0;
+  border-left-color: var(--border, #e5e4e7);
+}
+
+.ticks::after {
+  right: 0;
+  border-right-color: var(--border, #e5e4e7);
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================================
+   📱 RESPONSIVE MEDIA QUERY (TÉLÉPHONES & TABLETTES)
+====================================================== */
+@media (max-width: 768px) {
+
+  /* Réorganisation complète du Dashboard pour Mobile */
+  .dashboard-layout {
+    flex-direction: column;
+    /* Aligne la sidebar AU-DESSUS des annonces */
+    padding: 10px;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 20px 15px;
+  }
+
+  .dashboard-main {
+    padding: 24px 10px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    /* Une seule colonne d'annonces propre sur écran mobile */
+    gap: 20px;
+  }
+
+  /* Autres composants réorganisés pour mobile */
+  #next-steps {
+    flex-direction: column;
+  }
+
+  #next-steps>div {
+    min-width: 100%;
+    padding: 15px;
+  }
+
+  .hero .base {
+    width: 110px;
+  }
+
+  #center {
+    padding: 15px;
+  }
+
+  #next-steps ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #next-steps ul a {
+    width: auto;
+    flex-grow: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .catalog-grid {
+    grid-template-columns: 1fr;
+    /* 1 seule annonce par ligne sur téléphone */
+    padding: 10px;
+  }
+}
+
+/* <--- Déplacement de l'accolade de fermeture ici pour tout englober proprement */
