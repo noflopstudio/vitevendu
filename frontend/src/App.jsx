@@ -19,7 +19,7 @@ import ProductPage from "./pages/ProductPage";
 import TrackingMap from "./components/TrackingMap.jsx";
 import TrackingPage from "./pages/TrackingPage";
 import LivreurPage from "./pages/LivreurPage";
-import Settings from "./pages/Settings";
+
 import Users from "./pages/Users";
 import Orders from "./pages/Orders.jsx";
 import Wallet from "./pages/Wallet.jsx";
@@ -42,7 +42,7 @@ import Products from "./admin/products/Products";
 import Categories from "./admin/categories/Categories";
 
 import Security from "./admin/security/Security";
-import Logs from "./admin/logs/Logs";
+
 import Marketplace from "./pages/Marketplace";
 import AdminModeration from "./pages/admin/AdminModeration";
 import AdminReviews from "./admin/AdminReviews";
@@ -852,7 +852,7 @@ export default function App() {
 
           {/* SYSTEM */}
           <Route path="/admin/security" element={<Security />} />
-          <Route path="/admin/logs" element={<Logs />} />
+
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/marketplace" element={<Marketplace />} />
           <Route path="/admin/moderation" element={<AdminModeration />} />
