@@ -27,7 +27,7 @@ import Reviews from "./pages/Reviews.jsx";
 import Stock from "./pages/Stock.jsx";
 import AdminDashboard from "./admin/AdminDashboard";
 import Roles from "./admin/roles/Roles";
-import BlockedUsers from "./admin/users/BlockedUsers";
+
 
 import OrdersAll from "./admin/orders/OrdersAll";
 import OrdersPending from "./admin/orders/OrdersPending";
@@ -833,7 +833,7 @@ export default function App() {
 
           {/* USERS & ROLES */}
           <Route path="/users/roles" element={<Roles />} />
-          <Route path="/users/blocked" element={<BlockedUsers />} />
+
 
           {/* ORDERS */}
           <Route path="/admin/orders" element={<OrdersAll />} />
