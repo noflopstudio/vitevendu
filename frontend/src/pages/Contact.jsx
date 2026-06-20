@@ -53,7 +53,12 @@ export default function Contact() {
                                 <div style={styles.iconCircle}>✉️</div>
                                 <div>
                                     <h4 style={styles.cardLabel}>Adresse Email</h4>
-                                    <p style={{ ...styles.cardValue, color: "#4f46e5" }}>www.vitevendu@gmail.com</p>
+                                    <a
+                                        href="mailto:vitevendu1@gmail.com"
+                                        style={{ ...styles.cardValue, color: "#4f46e5", textDecoration: "none" }}
+                                    >
+                                        vitevendu1@gmail.com
+                                    </a>
                                 </div>
                             </div>
 

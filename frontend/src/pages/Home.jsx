@@ -409,17 +409,9 @@ export default function Home({ ads = [], user, profile }) {
                             </svg>
                             <span>{cartCount > 0 ? `Panier (${cartCount})` : "Vide"}</span>
                         </button>
-
-                        {/* BOUTON TÉLÉCHARGER PRO */}
-                        <button
-                            onClick={() => {
-                                const link = document.createElement("a");
-                                link.href = "/app.apk";
-                                link.download = "ViteVendu.apk";
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }}
+                        <a
+                            href="/app.apk"
+                            download="ViteVendu.apk"
                             style={{
                                 background: "#f1f5f9",
                                 border: "none",
@@ -432,10 +424,9 @@ export default function Home({ ads = [], user, profile }) {
                                 alignItems: "center",
                                 gap: "6px",
                                 cursor: "pointer",
-                                transition: "all 0.2s ease"
+                                textDecoration: "none"
                             }}
                         >
-                            {/* Icône de téléchargement SVG (Flèche vers le bas + barre de support) */}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
@@ -450,8 +441,9 @@ export default function Home({ ads = [], user, profile }) {
                                 <polyline points="7 10 12 15 17 10" />
                                 <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
-                            <span>Télécharger</span>
-                        </button>
+
+                            Télécharger
+                        </a>
 
                         {/* BOUTON CONNEXION */}
                         {!user && (

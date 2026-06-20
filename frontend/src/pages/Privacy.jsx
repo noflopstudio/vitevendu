@@ -2,11 +2,36 @@ import React from "react";
 
 export default function Privacy() {
     const sections = [
-        { id: "1", title: "1. Données collectées", text: "Dans le cadre de l'utilisation de notre plateforme, nous collectons les informations nécessaires au bon fonctionnement des services : votre identité complète (nom, prénom), votre adresse email, votre numéro de téléphone (notamment pour les liaisons WhatsApp), vos données de connexion cryptées, ainsi que l'ensemble des contenus (images, textes, prix) que vous publiez volontairement sur vos micro-boutiques." },
-        { id: "2", title: "2. Utilisation de vos données", text: "Les informations recueillies font l'objet d'un traitement informatique destiné exclusivement à : assurer la gestion et la personnalisation de votre compte marchand, fluidifier la mise en relation et l'ouverture des fenêtres de chat direct entre acheteurs et vendeurs, optimiser les performances techniques de l'application et vous adresser des notifications importantes relatives à vos annonces." },
-        { id: "3", title: "3. Partage et non-divulgation", text: "Nous appliquons une politique de tolérance zéro concernant le commerce de données : ViteVendu ne vend, ne loue, et ne cède jamais vos informations personnelles à des tiers. Les seules données partagées sont celles indispensables à l'activité commerciale que vous initiez (votre profil public de vendeur et vos annonces visibles par tous les visiteurs)." },
-        { id: "4", title: "4. Sécurité des infrastructures", text: "Vos données de connexion et d'authentification sont protégées par des protocoles de chiffrement avancés. Nous mettons en œuvre des mesures de sécurité rigoureuses au niveau de nos bases de données pour prévenir tout accès non autorisé, altération, divulgation ou destruction de vos fichiers personnels." },
-        { id: "5", title: "5. Vos droits et contrôle", text: "Conformément aux réglementations sur la protection des données, vous disposez d'un droit absolu d'accès, de rectification, de portabilité et de suppression de toutes les données vous concernant. Vous pouvez modifier vos informations directement depuis votre Dashboard ou formuler une demande de clôture de compte définitive auprès de notre support." }
+        {
+            id: "1",
+            title: "1. Données collectées",
+            text: "Dans le cadre de l'utilisation de ViteVendu, nous collectons uniquement les données nécessaires au bon fonctionnement de la plateforme. Cela inclut : votre identité (nom, prénom ou pseudo), votre adresse email, votre numéro de téléphone (si fourni), vos données de connexion sécurisées, ainsi que les contenus que vous publiez volontairement (annonces, images, descriptions et prix)."
+        },
+        {
+            id: "2",
+            title: "2. Utilisation des données",
+            text: "Les données collectées sont utilisées exclusivement pour : la création et la gestion de votre compte utilisateur, l'affichage de vos annonces, la mise en relation entre acheteurs et vendeurs, l'amélioration de l'expérience utilisateur et la sécurité de la plateforme. Nous n'utilisons jamais vos données à des fins non déclarées."
+        },
+        {
+            id: "3",
+            title: "3. Partage des données",
+            text: "ViteVendu ne vend, ne loue et ne cède jamais vos données personnelles à des tiers. Certaines informations publiques (comme vos annonces ou votre profil vendeur) peuvent être visibles par les utilisateurs de la plateforme afin de permettre le bon fonctionnement du service."
+        },
+        {
+            id: "4",
+            title: "4. Sécurité et protection",
+            text: "Nous mettons en place des mesures de sécurité techniques et organisationnelles pour protéger vos données contre l'accès non autorisé, la perte ou la modification. Les mots de passe sont chiffrés et les échanges sensibles sont sécurisés."
+        },
+        {
+            id: "5",
+            title: "5. Vos droits",
+            text: "Conformément aux règles de protection des données, vous disposez d'un droit d'accès, de modification et de suppression de vos informations personnelles. Vous pouvez exercer ces droits directement depuis votre compte ou en contactant notre support."
+        },
+        {
+            id: "6",
+            title: "6. Contact",
+            text: "Pour toute question concernant cette politique de confidentialité ou vos données personnelles, vous pouvez nous contacter à tout moment via : support@vitevendu.com"
+        }
     ];
 
     return (

@@ -47,6 +47,15 @@ export default function Blog() {
                     </p>
                 </section>
 
+                {/* ================= VISION ================= */}
+                <section style={styles.visionBox}>
+                    <h2 style={styles.visionTitle}>Notre vision</h2>
+                    <p style={styles.visionText}>
+                        ViteVendu a été créé pour simplifier le commerce local en Afrique.
+                        Nous connectons vendeurs et acheteurs sans intermédiaire, sans complications et sans barrières techniques.
+                    </p>
+                </section>
+
                 {/* ================= GRILLE DES ARTICLES ================= */}
                 <section style={styles.articlesGrid}>
                     {articles.map((article) => (
@@ -85,6 +94,14 @@ export default function Blog() {
                         <input type="email" placeholder="Votre adresse email..." style={styles.emailInput} />
                         <button style={styles.subscribeBtn}>S'abonner</button>
                     </div>
+                </section>
+
+                {/* ================= CTA ================= */}
+                <section style={styles.ctaBox}>
+                    <h3 style={styles.ctaTitle}>Prêt à vendre plus rapidement ?</h3>
+                    <p style={styles.ctaText}>
+                        Crée ta micro-boutique ViteVendu et commence à vendre aujourd’hui.
+                    </p>
                 </section>
 
             </div>
@@ -283,5 +300,46 @@ const styles = {
         fontSize: "13px",
         color: "#888888",
         margin: 0
+    },
+
+
+    visionBox: {
+        background: "#ffffff",
+        padding: "28px",
+        borderRadius: "16px",
+        border: "1px solid #e2e8f0",
+        marginBottom: "40px",
+        textAlign: "center"
+    },
+    visionTitle: {
+        fontSize: "20px",
+        fontWeight: "800",
+        color: "#0f172a",
+        marginBottom: "10px"
+    },
+    visionText: {
+        fontSize: "14.5px",
+        color: "#475569",
+        lineHeight: "1.6"
+    },
+
+
+    ctaBox: {
+        marginTop: "40px",
+        padding: "30px",
+        borderRadius: "16px",
+        background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
+        color: "#fff",
+        textAlign: "center"
+    },
+    ctaTitle: {
+        fontSize: "20px",
+        fontWeight: "800",
+        marginBottom: "8px"
+    },
+    ctaText: {
+        fontSize: "14.5px",
+        opacity: 0.9
     }
+
 };

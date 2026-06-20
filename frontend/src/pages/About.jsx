@@ -12,6 +12,9 @@ export default function About() {
                         Propulser le commerce de proximité dans <span style={styles.gradientText}>l'ère digitale</span>
                     </h1>
                     <p style={styles.leadText}>
+                        <p style={{ ...styles.leadText, marginTop: "10px", fontWeight: "500" }}>
+                            Achat, vente, livraison et gestion simplifiée — tout dans une seule application mobile et web.
+                        </p>
                         ViteVendu est une plateforme digitale nouvelle génération conçue pour briser les barrières du e-commerce traditionnel et dynamiser l'économie locale en Afrique.
                     </p>
                 </section>
@@ -43,6 +46,42 @@ export default function About() {
                             Nous croyons en un commerce plus juste et plus humain. Les acheteurs et les vendeurs négocient, discutent et concluent leurs transactions directement en direct.
                         </p>
                     </div>
+                </section>
+
+
+                {/* ================= PAIEMENTS & SÉCURITÉ ================= */}
+                <section style={styles.textSection}>
+                    <h3 style={styles.cardTitle}>Paiements & Sécurité</h3>
+                    <p style={styles.paragraph}>
+                        ViteVendu assure des échanges sécurisés entre acheteurs et vendeurs.
+                        Chaque transaction est protégée afin de limiter les fraudes et garantir la confiance.
+                    </p>
+                    <p style={styles.paragraph}>
+                        Nous travaillons à intégrer des solutions de paiement mobile modernes adaptées à l’Afrique
+                        (Mobile Money, cartes bancaires et paiements instantanés).
+                    </p>
+                </section>
+
+                {/* ================= LIVRAISON ================= */}
+                <section style={styles.textSection}>
+                    <h3 style={styles.cardTitle}>Livraison & Logistique</h3>
+                    <p style={styles.paragraph}>
+                        Les vendeurs peuvent organiser leurs propres livraisons ou collaborer avec des partenaires locaux.
+                    </p>
+                    <p style={styles.paragraph}>
+                        L’objectif est de réduire les délais et rapprocher les produits des clients le plus rapidement possible.
+                    </p>
+                </section>
+
+                {/* ================= SUPPORT ================= */}
+                <section style={styles.textSection}>
+                    <h3 style={styles.cardTitle}>Support & Assistance</h3>
+                    <p style={styles.paragraph}>
+                        Notre équipe est disponible pour accompagner les utilisateurs dans l’utilisation de la plateforme.
+                    </p>
+                    <p style={styles.paragraph}>
+                        ViteVendu vise une expérience simple, rapide et accessible même pour les débutants.
+                    </p>
                 </section>
 
                 {/* ================= DIRECTION & FONDATEURS ================= */}

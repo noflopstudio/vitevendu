@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Partner() {
 
-    const whatsappNumber = "2250747064774";
+    const whatsappNumber = "2250748922397";
 
     const partnerInfo = {
         platform: "ViteVendu",
@@ -130,14 +130,20 @@ export default function Partner() {
 
                 {/* ===== CTA ===== */}
                 <section style={styles.ctaCard}>
-                    <h3 style={styles.ctaTitle}>💬 Contact Direct</h3>
+                    <div style={styles.ctaHeader}>
+                        <span style={styles.onlineBadge}>🟢 En ligne</span>
+                        <h3 style={styles.ctaTitle}>💬 Contact Direct</h3>
+                    </div>
 
                     <p style={styles.ctaText}>
                         Discutez directement avec notre équipe pour rejoindre le programme partenaire.
                     </p>
 
+                    {/* MESSAGE PROPRE */}
                     <a
-                        href={`https://wa.me/${whatsappNumber}?text=Bonjour%20ViteVendu,%20je%20souhaite%20devenir%20partenaire.`}
+                        href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                            "Bonjour ViteVendu, je souhaite devenir partenaire."
+                        )}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={styles.whatsappBtn}
@@ -357,7 +363,7 @@ const styles = {
         color: "#94a3b8",
         fontWeight: "500",
         marginTop: "20px",
-        marginHeight: 0
+        margin: 0
     },
 
     footer: {
