@@ -110,7 +110,7 @@ export default function LivreurPage() {
                             {items.map((item, i) => (
                                 <div key={i} style={styles.item}>
                                     <img src={item.image || "https://via.placeholder.com/60"} style={styles.img} />
-                                    <div><b>{item.title}</b><br />👟 {item.size || item.pointure || "N/A"} | 📦 {item.quantity} | 💰 {item.price} FCFA</div>
+                                    <div><b>{item.title}</b><br /> {item.size || item.pointure || "N/A"} | 📦 {item.quantity} | 💰 {item.price} FCFA</div>
                                 </div>
                             ))}
                             <p><b>Total:</b> {o.total} FCFA</p>

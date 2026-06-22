@@ -8,7 +8,26 @@ export default function ProductPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const product = location.state?.product;
+    const [product, setProduct] = useState(location.state?.product || null);
+
+    let variants = {
+        colors: [],
+        sizes: []
+    };
+
+    try {
+        if (product?.variants) {
+            variants =
+                typeof product.variants === "string"
+                    ? JSON.parse(product.variants)
+                    : product.variants;
+        }
+    } catch (e) {
+        variants = {
+            colors: [],
+            sizes: []
+        };
+    }
     const { addToCart, cart } = useCartStore();
 
     const [selectedSize, setSelectedSize] = useState("");
@@ -102,28 +121,27 @@ export default function ProductPage() {
     let sizes = [];
 
     try {
-        if (product?.sizes) {
+        // Les tailles sont enregistrées dans product.variants.sizes
+        if (product?.variants?.sizes) {
             sizes =
-                typeof product.sizes === "string"
-                    ? JSON.parse(product.sizes)
-                    : product.sizes;
+                typeof product.variants.sizes === "string"
+                    ? JSON.parse(product.variants.sizes)
+                    : product.variants.sizes;
         }
     } catch (e) {
         sizes = [];
     }
 
-    // fallback SI VIDE
-    if (!Array.isArray(sizes) || sizes.length === 0) {
-        sizes = isClothes
-            ? ["S", "M", "L", "XL", "XXL"]
-            : isShoes
-                ? ["38", "39", "40", "41", "42", "43", "44", "45"]
-                : [];
+    // Aucune taille automatique.
+    // On affiche uniquement celles saisies par le vendeur.
+    if (!Array.isArray(sizes)) {
+        sizes = [];
     }
-    const titleLabel = isClothes
-        ? "Sélectionnez votre taille"
-        : isShoes
-            ? "Sélectionnez votre pointure"
+
+    const titleLabel = isShoes
+        ? "Pointures disponibles"
+        : isClothes
+            ? "Tailles disponibles"
             : "Options disponibles";
 
     const buildCartItem = () => {
@@ -137,22 +155,31 @@ export default function ProductPage() {
 
     const handleAddToCart = () => {
         if (needsSize && !selectedSize) {
-            alert(isShoes ? "Veuillez sélectionner une pointure" : "Veuillez sélectionner une taille");
+            alert(
+                isShoes
+                    ? "Veuillez sélectionner une pointure"
+                    : "Veuillez sélectionner une taille"
+            );
             return;
         }
+
         addToCart(buildCartItem());
         alert("Produit ajouté au panier ! 🛒");
     };
 
     const handleBuyNow = () => {
         if (needsSize && !selectedSize) {
-            alert(isShoes ? "Veuillez sélectionner une pointure" : "Veuillez sélectionner une taille");
+            alert(
+                isShoes
+                    ? "Veuillez sélectionner une pointure"
+                    : "Veuillez sélectionner une taille"
+            );
             return;
         }
+
         addToCart(buildCartItem());
         navigate("/cart");
     };
-
     return (
         <div style={styles.pageWrapper}>
 
@@ -238,6 +265,82 @@ export default function ProductPage() {
                                 {product.description || "Aucune description supplémentaire fournie par le vendeur."}
                             </p>
                         </div>
+                        {variants.colors.length > 0 && (
+                            <div style={{ marginTop: 24 }}>
+                                <h3 style={styles.sectionTitle}>
+                                    Couleurs disponibles
+                                </h3>
+
+                                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                                    {variants.colors.map((color, i) => {
+
+                                        const colorMap = {
+                                            noir: "black",
+                                            blanc: "white",
+                                            rouge: "red",
+                                            bleu: "blue",
+                                            vert: "green",
+                                            jaune: "yellow",
+                                            gris: "gray",
+                                            orange: "orange",
+                                            violet: "purple",
+                                            rose: "pink",
+                                            marron: "brown",
+                                            beige: "beige",
+                                            doré: "gold",
+                                            argent: "silver"
+                                        };
+
+                                        const cssColor = colorMap[color.toLowerCase()] || color;
+
+                                        const isSelected = selectedColor === color;
+
+                                        const isWhite =
+                                            cssColor === "white" ||
+                                            cssColor === "#fff" ||
+                                            cssColor === "#ffffff";
+
+                                        return (
+                                            <button
+                                                key={i}
+                                                onClick={() => setSelectedColor(color)}
+                                                title={color}
+                                                style={{
+                                                    width: 40,
+                                                    height: 40,
+                                                    borderRadius: "50%",
+                                                    backgroundColor: cssColor,
+                                                    cursor: "pointer",
+                                                    border: isSelected
+                                                        ? "3px solid #000"
+                                                        : isWhite
+                                                            ? "1px solid #ccc"
+                                                            : "2px solid transparent",
+                                                    boxShadow: isSelected
+                                                        ? "0 0 0 3px #fff, 0 0 0 5px #000"
+                                                        : "0 2px 6px rgba(0,0,0,.15)",
+                                                    transition: ".2s",
+                                                    padding: 0
+                                                }}
+                                            />
+                                        );
+                                    })}
+                                </div>
+
+                                {selectedColor && (
+                                    <p
+                                        style={{
+                                            marginTop: 12,
+                                            fontSize: 14,
+                                            color: "#475569",
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        Couleur sélectionnée : {selectedColor}
+                                    </p>
+                                )}
+                            </div>
+                        )}
 
                         {/* --- NOUVELLE SECTION : FORMULAIRE LAISSER UN AVIS --- */}
                         <div style={styles.reviewFormContainer}>

@@ -60,7 +60,27 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [editingAdId, setEditingAdId] = useState(null);
+  const [productType, setProductType] = useState("other");
 
+  const [variants, setVariants] = useState({
+    colors: [],
+    sizes: []
+  });
+
+  const addVariant = () => {
+    setVariants((prev) => [
+      ...prev,
+      { name: "", price: "", stock: "" }
+    ]);
+  };
+
+  const updateVariant = (index, field, value) => {
+    setVariants((prev) =>
+      prev.map((v, i) =>
+        i === index ? { ...v, [field]: value } : v
+      )
+    );
+  };
   /* ===== PROTECTION ABONNEMENT (MODIFIÉE POUR LE DEV) ===== */
   const isPaid = true;
   const isExpired = false;
@@ -110,21 +130,32 @@ function Dashboard({ user, profile, ads, fetchAds }) {
 
   useEffect(() => {
     const checkUserStatus = async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      try {
+        // 🔥 1. récupérer session propre
+        const { data: sessionData } = await supabase.auth.getSession();
+        const user = sessionData?.session?.user;
 
-      if (!userData?.user) return;
+        if (!user) return;
 
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("status")
-        .eq("id", userData.user.id)
-        .single();
+        // 🔥 2. requête profile sécurisée
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("status")
+          .eq("id", user.id)
+          .single();
 
-      if (profile?.status === "blocked") {
-        setBlocked(true);
+        if (error) {
+          console.log("PROFILE CHECK ERROR:", error);
+          return;
+        }
 
-        // optionnel : logout automatique
-        await supabase.auth.signOut();
+        // 🔥 3. blocage
+        if (profile?.status === "blocked") {
+          setBlocked(true);
+          await supabase.auth.signOut();
+        }
+      } catch (err) {
+        console.log("CHECK USER STATUS ERROR:", err);
       }
     };
 
@@ -214,7 +245,6 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     }
   };
 
-  /* ===== SUBMIT AD (CORRIGÉ SANS DOUBLONS) ===== */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -223,14 +253,18 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       return;
     }
 
+    const variantsData = {
+      colors: variants.colors || [],
+      sizes: variants.sizes || []
+    };
+
     let imageUrl = null;
 
-    // upload image si nouvelle image
     if (image) {
       const cleanName = image.name
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")   // enlève accents
-        .replace(/[^a-zA-Z0-9.\-_]/g, "_"); // remplace espaces et caractères spéciaux
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9.\-_]/g, "_");
 
       const fileName = `${Date.now()}-${cleanName}`;
 
@@ -261,7 +295,8 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           price: priceValue,
           old_price: oldPriceValue,
           description,
-          image: imageUrl || undefined, // garde ancienne image si pas nouvelle
+          image: imageUrl || undefined,
+          variants: variantsData,
         })
         .eq("id", editingAdId);
 
@@ -273,6 +308,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
 
     // INSERT MODE
     else {
+
       const { error } = await supabase.from("ads").insert([
         {
           title,
@@ -281,7 +317,9 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           description,
           image: imageUrl,
           user_id: user.id,
-        },
+          type: productType,
+          variants: variantsData,
+        }
       ]);
 
       if (error) {
@@ -372,11 +410,11 @@ function Dashboard({ user, profile, ads, fetchAds }) {
         💬 Messages
       </Link>
 
-      {/* 1. SIDEBAR DE GESTION */}
+      {/* ===================== SIDEBAR ===================== */}
       <aside style={styles.sidebar}>
-        {/* CARTE UTILISATEUR OPTIMISÉE */}
+
+        {/* USER CARD */}
         <div style={styles.userCard}>
-          {/* ZONE PHOTO DE PROFIL STYLE PRO */}
           <div style={styles.avatarContainer}>
             <label style={styles.avatarLabel}>
               <input
@@ -390,122 +428,42 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                 alt="Profil"
                 style={styles.avatarImage}
               />
-              <div style={styles.avatarOverlay}>
-                <span>📷</span>
-              </div>
+              <div style={styles.avatarOverlay}>📷</div>
             </label>
-            <div style={styles.onlineStatusBadge}></div>
           </div>
 
-          {/* INFORMATIONS ET FORMULAIRE */}
           <div style={styles.profileContent}>
             <span style={styles.profileRoleBadge}>Marchand</span>
 
-            <div style={styles.inputGroup}>
-              <label style={styles.fieldLabel}>Nom d'utilisateur</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Ex: SuperBoutique"
-                style={styles.usernameInput}
-              />
-            </div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Nom d'utilisateur"
+              style={styles.usernameInput}
+            />
 
-            {/* ACTIONS */}
             <div style={styles.actionGroup}>
               <button onClick={saveProfile} style={styles.saveProfileBtn}>
-                Enregistrer les modifications
+                Enregistrer
               </button>
               <button onClick={handleLogout} style={styles.logoutProfileBtn}>
-                Se déconnecter
+                Déconnexion
               </button>
             </div>
           </div>
         </div>
-
-        {/* COMPOSANT ABONNEMENT INTEGRÉ */}
-        <div style={{
-          background: "#ffffff",
-          padding: "16px",
-          borderRadius: "14px",
-          border: "1px solid #e5e7eb",
-        }}>
-
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "12px"
-          }}>
-
-            <span style={{
-              fontSize: "12px",
-              fontWeight: "700",
-              color: "#4b5563",
-              textTransform: "uppercase"
-            }}>
-              Abonnement
-            </span>
-
-            <span style={{
-              background: "#d1fae5",
-              color: "#065f46",
-              padding: "4px 8px",
-              borderRadius: "100px",
-              fontSize: "10px",
-              fontWeight: "700",
-              textTransform: "uppercase"
-            }}>
-              ● Gratuit
-            </span>
-
-          </div>
-
-          <p style={{
-            margin: "0 0 6px 0",
-            fontSize: "13px",
-            color: "#111827"
-          }}>
-            Plan : <b>Accès Gratuit</b>
-          </p>
-
-          <p style={{
-            margin: "0 0 6px 0",
-            fontSize: "11px",
-            color: "#6b7280"
-          }}>
-            💳 La plateforme est actuellement totalement gratuite
-          </p>
-
-          <p style={{
-            margin: 0,
-            fontSize: "11px",
-            color: "#6b7280"
-          }}>
-            🔄 Les abonnements premium seront disponibles très bientôt
-          </p>
-
-          <p style={{
-            margin: "6px 0 0 0",
-            fontSize: "11px",
-            color: "#ef4444",
-            fontWeight: "600"
-          }}>
-            ⚠️ Certaines fonctionnalités avancées pourront être payantes à l’avenir
-          </p>
-
-        </div>
-        {/* FORMULAIRE D'ÉDITION / PUBLICATION */}
+        {/* ================= FORMULAIRE ================= */}
         <div style={styles.sidebarModule}>
           <h4 style={styles.moduleTitle}>
             {editingAdId ? "Modifier l'Annonce" : "Nouvelle Publication"}
           </h4>
 
           <form onSubmit={handleSubmit} style={styles.verticalForm}>
+
             <input
               style={styles.sidebarInput}
-              placeholder="Titre de l'annonce *"
+              placeholder="Titre *"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -513,31 +471,93 @@ function Dashboard({ user, profile, ads, fetchAds }) {
 
             <input
               style={styles.sidebarInput}
-              placeholder="Ancien prix (FCFA)"
               type="number"
+              placeholder="Ancien prix"
               value={oldPrice}
               onChange={(e) => setOldPrice(e.target.value)}
             />
 
             <input
               style={styles.sidebarInput}
-              placeholder="Prix actuel (FCFA) *"
               type="number"
+              placeholder="Prix *"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               required
             />
-
             <textarea
               style={styles.sidebarTextarea}
-              placeholder="Description du produit ou service..."
+              placeholder="Description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={5}
+              rows={4}
             />
 
+            <h4 style={{ fontSize: 13, marginTop: 12 }}>
+              Type de produit
+            </h4>
+
+            <select
+              value={productType}
+              onChange={(e) => setProductType(e.target.value)}
+              style={styles.sidebarInput}
+            >
+              <option value="other">Produit classique</option>
+              <option value="clothes">Vêtement</option>
+              <option value="shoes">Chaussure</option>
+            </select>
+
+            {/* ================= VARIANTS PRO ================= */}
+            <div
+              style={{
+                marginTop: 12,
+                padding: 10,
+                border: "1px solid #e5e7eb",
+                borderRadius: 10,
+                background: "#fafafa"
+              }}
+            >
+
+              <h4 style={{ fontSize: 13, marginBottom: 10 }}>
+                Couleurs disponibles
+              </h4>
+
+              <input
+                style={styles.sidebarInput}
+                placeholder="Ex: noir, bleu, rouge"
+                onChange={(e) =>
+                  setVariants((prev) => ({
+                    ...prev,
+                    colors: e.target.value
+                      .split(",")
+                      .map(c => c.trim())
+                      .filter(Boolean)
+                  }))
+                }
+              />
+              <h4 style={{ fontSize: 13, marginTop: 12 }}>
+                Tailles / Pointures
+              </h4>
+
+              <input
+                style={styles.sidebarInput}
+                placeholder="Ex: S, M, L ou 38, 39, 40"
+                onChange={(e) =>
+                  setVariants((prev) => ({
+                    ...prev,
+                    sizes: e.target.value
+                      .split(",")
+                      .map(s => s.trim())
+                      .filter(Boolean)
+                  }))
+                }
+              />
+
+            </div>
+
+            {/* IMAGE */}
             <label style={styles.uploadZone}>
-              📷 {image ? "Image sélectionnée" : "Ajouter une image"}
+              📷 {image ? "Image OK" : "Ajouter image"}
               <input
                 type="file"
                 accept="image/*"
@@ -547,67 +567,126 @@ function Dashboard({ user, profile, ads, fetchAds }) {
             </label>
 
             <button type="submit" style={styles.proBtnPrimary}>
-              {editingAdId ? "Enregistrer les modifications" : "Publier l'annonce"}
+              {editingAdId ? "Modifier" : "Publier"}
             </button>
 
             {editingAdId && (
-              <button type="button" onClick={cancelEdit} style={styles.proBtnSecondary}>
+              <button
+                type="button"
+                onClick={cancelEdit}
+                style={styles.proBtnSecondary}
+              >
                 Annuler
               </button>
             )}
+
           </form>
         </div>
       </aside>
 
-      {/* 2. ESPACE CENTRAL DES ANNONCES */}
+
+      {/* ===================== MAIN ===================== */}
       <main style={styles.mainContent}>
         <div style={styles.viewPort}>
+
           <div style={styles.viewHeader}>
             <h1 style={styles.mainTitle}>Mon Catalogue</h1>
-            <p style={styles.mainSubtitle}>Gérez, modifiez ou supprimez vos annonces en ligne en temps réel.</p>
+            <p style={styles.mainSubtitle}>
+              Gère tes annonces en temps réel
+            </p>
           </div>
 
           {myAds.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px", color: "#9ca3af" }}>
-              <span style={{ fontSize: "40px" }}>📦</span>
-              <p style={{ marginTop: "10px", fontSize: "14px" }}>Vous n'avez pas encore publié d'annonces.</p>
+            <div style={{
+              textAlign: "center",
+              padding: "80px 20px",
+              background: "#ffffff",
+              borderRadius: "24px",
+              boxShadow: "0 4px 18px rgba(0, 0, 0, 0.02)",
+              color: "#64748b",
+              fontWeight: "500"
+            }}>
+              <span style={{ fontSize: "32px", display: "block", marginBottom: "12px" }}>📦</span>
+              Aucun produit disponible dans le catalogue
             </div>
           ) : (
             <div style={styles.cleanGrid}>
               {myAds.map((ad) => (
                 <div key={ad.id} style={styles.cleanCard}>
+
+                  {/* Conteneur d'image pour un rendu propre sans déformation */}
                   <div style={styles.cardImageContainer}>
                     {ad.image ? (
-                      <img src={ad.image} alt={ad.title} style={styles.cardImg} />
+                      <img
+                        src={ad.image}
+                        alt={ad.title}
+                        style={styles.cardImg}
+                      />
                     ) : (
-                      <div style={styles.emptyImgFallback}>Aucun visuel disponible</div>
+                      <div style={styles.emptyImgFallback}>Aucune image</div>
                     )}
                   </div>
 
                   <div style={styles.cardBody}>
+
+                    {/* Ligne d'en-tête de la carte avec Titre et Prix alignés */}
                     <div style={styles.cardHeaderRow}>
                       <h3 style={styles.cardTitle}>{ad.title}</h3>
-                      <span style={styles.cardPrice}>{ad.price.toLocaleString()} FCFA</span>
+                      <span style={styles.cardPrice}>
+                        {Number(ad.price).toLocaleString()} FCFA
+                      </span>
                     </div>
-                    <p style={styles.cardDescription}>
-                      {ad.description || "Aucune description fournie pour cet article."}
-                    </p>
 
+                    {/* Description du produit */}
+                    <p style={styles.cardDescription}>{ad.description}</p>
+
+                    {/* Section du bas : Variantes et Boutons d'action */}
                     <div style={styles.cardFooter}>
+                      {Array.isArray(ad.variants) && ad.variants.length > 0 && (
+                        <p style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginTop: 0, marginBottom: "14px", display: "flex", alignItems: "center", gap: "4px" }}>
+                          <span>✨</span> {ad.variants.length} {ad.variants.length > 1 ? 'variantes disponibles' : 'variante disponible'}
+                        </p>
+                      )}
+
                       <div style={styles.cardActionGroup}>
-                        <button onClick={() => startEdit(ad)} style={styles.btnIconEdit}>
+                        <button
+                          onClick={() => startEdit(ad)}
+                          style={styles.btnIconEdit}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#4338ca"; // Indigo plus foncé au survol
+                            e.currentTarget.style.transform = "translateY(-1px)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#4f46e5";
+                            e.currentTarget.style.transform = "translateY(0)";
+                          }}
+                        >
                           Modifier
                         </button>
-                        <button onClick={() => handleDelete(ad.id)} style={styles.btnIconDelete}>
+
+                        <button
+                          onClick={() => handleDelete(ad.id)}
+                          style={styles.btnIconDelete}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#fee2e2"; // Fond rouge plus intense au survol
+                            e.currentTarget.style.borderColor = "#fca5a5";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#fef2f2";
+                            e.currentTarget.style.borderColor = "#fee2e2";
+                          }}
+                        >
                           Supprimer
                         </button>
                       </div>
                     </div>
+
                   </div>
                 </div>
               ))}
             </div>
           )}
+
         </div>
       </main>
     </div>
@@ -702,13 +781,27 @@ export default function App() {
   // ================= INIT =================
   useEffect(() => {
     const init = async () => {
+      // 🔥 1. force refresh session (IMPORTANT)
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.refreshSession();
+
+      if (sessionError) {
+        console.log("Session refresh error:", sessionError);
+      }
+
       await fetchAds();
 
+      // 🔥 2. récup session propre
       const { data } = await supabase.auth.getSession();
 
-      if (data.session) {
-        setUser(data.session.user);
-        await fetchUserProfile(data.session.user.id);
+      if (data.session?.user) {
+        const user = data.session.user;
+
+        setUser(user);
+        await fetchUserProfile(user.id);
+      } else {
+        setUser(null);
+        setProfile(null);
       }
 
       setLoading(false);
@@ -1123,6 +1216,8 @@ const styles = {
     height: "100%",
     objectFit: "cover" // Recadre proprement sans déformer le visuel
   },
+
+
   emptyImgFallback: {
     height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontSize: "13px", fontWeight: "500"
   },
