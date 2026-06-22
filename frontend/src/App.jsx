@@ -61,6 +61,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   const [image, setImage] = useState(null);
   const [editingAdId, setEditingAdId] = useState(null);
   const [productType, setProductType] = useState("other");
+  const [stock, setStock] = useState(0);
 
   const [variants, setVariants] = useState({
     colors: [],
@@ -297,6 +298,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           description,
           image: imageUrl || undefined,
           variants: variantsData,
+          stock: Number(stock),
         })
         .eq("id", editingAdId);
 
@@ -319,6 +321,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           user_id: user.id,
           type: productType,
           variants: variantsData,
+          stock: Number(stock),
         }
       ]);
 
@@ -498,13 +501,23 @@ function Dashboard({ user, profile, ads, fetchAds }) {
             </h4>
 
             <select
+              style={styles.sidebarInput}
               value={productType}
               onChange={(e) => setProductType(e.target.value)}
-              style={styles.sidebarInput}
             >
-              <option value="other">Produit classique</option>
-              <option value="clothes">Vêtement</option>
-              <option value="shoes">Chaussure</option>
+              <option value="all">Tous</option>
+              <option value="shoes">Chaussures</option>
+              <option value="phones">Téléphones</option>
+              <option value="clothes">Vêtements</option>
+              <option value="computers">Ordinateurs</option>
+              <option value="accessories">Accessoires</option>
+              <option value="home">Maison</option>
+              <option value="beauty">Beauté</option>
+              <option value="sport">Sport</option>
+              <option value="gaming">Gaming</option>
+              <option value="cars">Voitures</option>
+              <option value="electronics">Électronique</option>
+              <option value="other">Autres</option>
             </select>
 
             {/* ================= VARIANTS PRO ================= */}
@@ -547,12 +560,24 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                     ...prev,
                     sizes: e.target.value
                       .split(",")
-                      .map(s => s.trim())
-                      .filter(Boolean)
+                      .map((s) => s.trim())
+                      .filter(Boolean),
                   }))
                 }
               />
 
+              <h4 style={{ fontSize: 13, marginTop: 12 }}>
+                Stock disponible
+              </h4>
+
+              <input
+                type="number"
+                min="0"
+                value={stock}
+                onChange={(e) => setStock(Number(e.target.value))}
+                placeholder="Ex : 25"
+                style={styles.sidebarInput}
+              />
             </div>
 
             {/* IMAGE */}

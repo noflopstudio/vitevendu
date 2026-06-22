@@ -238,22 +238,51 @@ export default function ProductPage() {
                         {/* CARACTÉRISTIQUES RÉELLES */}
                         <div style={{ marginTop: "24px" }}>
                             <h3 style={styles.sectionTitle}>Fiche descriptive</h3>
+
                             <table style={styles.specTable}>
                                 <tbody>
+
                                     <tr>
                                         <td style={styles.specLabel}>État de l'article</td>
-                                        <td style={styles.specValue}>{product.condition || "Non spécifié"}</td>
+                                        <td style={styles.specValue}>
+                                            {product.condition || "Non spécifié"}
+                                        </td>
                                     </tr>
+
                                     <tr>
                                         <td style={styles.specLabel}>Lieu de disponibilité</td>
-                                        <td style={styles.specValue}>{product.location || "Abidjan, Côte d'Ivoire"}</td>
+                                        <td style={styles.specValue}>
+                                            {product.location || "Abidjan, Côte d'Ivoire"}
+                                        </td>
                                     </tr>
+
                                     {product.brand && (
                                         <tr>
                                             <td style={styles.specLabel}>Marque</td>
-                                            <td style={styles.specValue}>{product.brand}</td>
+                                            <td style={styles.specValue}>
+                                                {product.brand}
+                                            </td>
                                         </tr>
                                     )}
+
+                                    <tr>
+                                        <td style={styles.specLabel}>Stock disponible</td>
+                                        <td
+                                            style={{
+                                                ...styles.specValue,
+                                                fontWeight: "700",
+                                                color:
+                                                    Number(product.stock) > 0
+                                                        ? "#16a34a"
+                                                        : "#dc2626"
+                                            }}
+                                        >
+                                            {Number(product.stock) > 0
+                                                ? `${product.stock} article${Number(product.stock) > 1 ? "s" : ""} en stock`
+                                                : "Rupture de stock"}
+                                        </td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -724,10 +753,14 @@ const styles = {
         paddingTop: "16px"
     },
     descriptionText: {
+        margin: 0,
         fontSize: "14px",
         color: "#475569",
-        lineHeight: "1.6",
-        margin: 0
+        lineHeight: "1.8",
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+        overflowWrap: "break-word",
+        textAlign: "justify"
     },
     reviewsSection: {
         marginTop: "24px",

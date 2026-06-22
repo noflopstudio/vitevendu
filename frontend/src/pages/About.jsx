@@ -92,7 +92,6 @@ export default function About() {
                     </p>
 
                     <div style={styles.teamGrid}>
-
                         {/* Membre 1 - TOI */}
                         <div style={styles.teamCard}>
                             <div style={styles.avatarZone}>👑</div>
@@ -105,7 +104,19 @@ export default function About() {
                             </div>
                         </div>
 
-                        {/* Membre 2 - TON FRÈRE */}
+                        {/* Membre 2 - GRAND FRÈRE */}
+                        <div style={styles.teamCard}>
+                            <div style={styles.avatarZone}>🧠</div>
+                            <div style={styles.teamInfo}>
+                                <h4 style={styles.memberName}>Yelo Ruben</h4>
+                                <span style={styles.memberRole}>Conseiller principal & Mentor stratégique</span>
+                                <p style={styles.memberBio}>
+                                    Il accompagne la vision de ViteVendu en apportant son expérience, ses conseils stratégiques et son expertise pour guider les décisions importantes du projet.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Membre 3 - CO-FONDATEUR */}
                         <div style={styles.teamCard}>
                             <div style={styles.avatarZone}>🤝</div>
                             <div style={styles.teamInfo}>
