@@ -1,14 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "../supabaseClient";
 
-// 🎨 THÈME COULEURS
+// 🎨 THÈME COULEURS ÉLÉGANT
 const colors = {
     blue: "#2563eb",
-    green: "#065f46",
+    green: "#10b981",
     orange: "#f97316",
-    bg: "#f4f6f8",
+    bg: "#f8fafc",
     white: "#ffffff",
-    text: "#111827"
+    text: "#0f172a",
+    muted: "#64748b",
+    border: "#e2e8f0"
 };
 
 export default function LivreurPage() {
@@ -17,6 +19,14 @@ export default function LivreurPage() {
     const [profile, setProfile] = useState(null);
     const [trackingOrderId, setTrackingOrderId] = useState(null);
     const [profileLoaded, setProfileLoaded] = useState(false);
+
+    // ✍️ États pour le formulaire de candidature (Tous conservés)
+    const [fullName, setFullName] = useState("");
+    const [whatsappNum, setWhatsappNum] = useState("");
+    const [zone, setZone] = useState("");
+    const [experience, setExperience] = useState("");
+    const [transport, setTransport] = useState("");
+    const [availability, setAvailability] = useState("");
 
     const watchId = useRef(null);
 
@@ -49,11 +59,13 @@ export default function LivreurPage() {
         });
     };
 
-    const stopTracking = () => {
-        if (watchId.current) navigator.geolocation.clearWatch(watchId.current);
+    function stopTracking() {
+        if (watchId.current) {
+            navigator.geolocation.clearWatch(watchId.current);
+        }
         watchId.current = null;
         setTrackingOrderId(null);
-    };
+    }
 
     const updateStatus = async (id, status) => {
         await supabase.from("orders").update({ status }).eq("id", id);
@@ -61,82 +73,219 @@ export default function LivreurPage() {
         await fetchOrders();
     };
 
+    // 🚀 Fonction pour générer le lien WhatsApp dynamique (Conservée avec les nouveaux champs ajoutés)
+    const handleWhatsAppSubmit = (e) => {
+        if (!fullName || !whatsappNum || !zone) {
+            e.preventDefault();
+            alert("Veuillez remplir au moins le nom, le numéro et la zone.");
+            return;
+        }
+
+        const phone = "2250748922397";
+        const message = `Bonjour, je souhaite devenir livreur chez ViteVendu. Voici mes informations :
+- *Nom complet :* ${fullName}
+- *WhatsApp :* ${whatsappNum}
+- *Ville / Commune :* ${zone}
+- *Moyen de transport :* ${transport || "Non spécifié"}
+- *Disponibilité :* ${availability || "Non spécifiée"}
+- *Expérience :* ${experience || "Aucune mentionnée"}`;
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
+    };
+
     if (loading) return <div style={styles.center}>🔄 Chargement...</div>;
     if (!profileLoaded) return null;
 
-    // --- PAGE NON-LIVREUR (DESIGN COMPLET) ---
+    // --- PAGE NON-LIVREUR (DESIGN COMPACT & PROFESSIONNEL) ---
     if (!profile || (profile.role !== "livreur" && profile.role !== "admin")) {
         return (
             <div style={styles.page}>
                 <div style={styles.container}>
-                    <h2 style={{ color: colors.blue }}>🚚 Devenir Livreur</h2>
-                    <p>Remplis ce formulaire pour rejoindre notre équipe.</p>
+                    <div style={styles.formCard}>
+                        <h2 style={styles.title}>🚚 Devenir Livreur</h2>
+                        <p style={styles.subtitle}>
+                            Rejoignez l'équipe ViteVendu et commencez à livrer des commandes près de chez vous.
+                        </p>
 
-                    <div style={styles.inputGroup}><label>📷 Photo de profil</label><input type="file" accept="image/*" style={styles.input} /></div>
-                    <div style={styles.inputGroup}><label>📄 CV (PDF ou image)</label><input type="file" accept=".pdf,image/*" style={styles.input} /></div>
-                    <div style={styles.inputGroup}><label>👤 Nom complet</label><input type="text" placeholder="Ex: Kouassi Koffi" style={styles.input} /></div>
-                    <div style={styles.inputGroup}><label>📞 Numéro WhatsApp</label><input type="tel" placeholder="Ex: 07XXXXXXXX" style={styles.input} /></div>
-                    <div style={styles.inputGroup}><label>🏠 Ville / Zone</label><input type="text" placeholder="Ex: Abidjan - Cocody" style={styles.input} /></div>
-                    <div style={styles.inputGroup}><label>🚀 Expérience (optionnel)</label><textarea placeholder="Décris ton expérience" style={{ ...styles.input, height: 80 }} /></div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>👤 Nom complet</label>
+                            <input
+                                type="text"
+                                placeholder="Ex : Kouassi Koffi"
+                                style={styles.input}
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                            />
+                        </div>
 
-                    <a href="https://wa.me/2250748922397?text=Bonjour%20je%20veux%20devenir%20livreur%20chez%20vous."
-                        target="_blank" style={styles.btnWhatsApp}>💬 Envoyer ma candidature WhatsApp</a>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>📞 Numéro WhatsApp</label>
+                            <input
+                                type="tel"
+                                placeholder="Ex : 07XXXXXXXX"
+                                style={styles.input}
+                                value={whatsappNum}
+                                onChange={(e) => setWhatsappNum(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>📍 Ville / Commune</label>
+                            <input
+                                type="text"
+                                placeholder="Ex : Abidjan - Cocody"
+                                style={styles.input}
+                                value={zone}
+                                onChange={(e) => setZone(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>🛵 Moyen de transport</label>
+                            <select
+                                style={styles.select}
+                                value={transport}
+                                onChange={(e) => setTransport(e.target.value)}
+                            >
+                                <option value="">Choisir...</option>
+                                <option>Moto</option>
+                                <option>Voiture</option>
+                                <option>Vélo</option>
+                                <option>Scooter</option>
+                                <option>À pied</option>
+                            </select>
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>🕒 Disponibilité</label>
+                            <select
+                                style={styles.select}
+                                value={availability}
+                                onChange={(e) => setAvailability(e.target.value)}
+                            >
+                                <option value="">Choisir...</option>
+                                <option>Temps plein</option>
+                                <option>Temps partiel</option>
+                                <option>Week-end uniquement</option>
+                                <option>Soir uniquement</option>
+                            </select>
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>🚀 Expérience (optionnel)</label>
+                            <textarea
+                                placeholder="Parlez-nous de votre expérience..."
+                                style={styles.textarea}
+                                value={experience}
+                                onChange={(e) => setExperience(e.target.value)}
+                            />
+                        </div>
+
+                        <button onClick={handleWhatsAppSubmit} style={styles.btnWhatsApp}>
+                            💬 Envoyer ma candidature via WhatsApp
+                        </button>
+                    </div>
                 </div>
             </div>
         );
     }
 
-    // --- PAGE LIVREUR (DESIGN COMPLET) ---
+    // --- PAGE LIVREUR (DESIGN COMPLET ESPACE PRO) ---
     return (
         <div style={styles.page}>
-            <h2 style={{ color: colors.blue, marginBottom: 20 }}>🚚 Espace Livreur</h2>
             <div style={styles.container}>
-                {orders.map((o) => {
-                    let items = [];
-                    try { items = typeof o.items === "string" ? JSON.parse(o.items) : o.items || []; } catch (e) { items = []; }
-                    const shipping = o.shipping_details || {};
+                <h2 style={{ ...styles.title, marginBottom: 20, textAlign: "left" }}>🚚 Espace Livreur</h2>
 
-                    return (
-                        <div key={o.id} style={styles.card}>
-                            <h3 style={{ color: colors.blue }}>📦 Commande #{o.id}</h3>
-                            <div style={styles.infoBox}>
-                                <p>👤 {shipping.name || "Non défini"}</p>
-                                <p>📞 {shipping.phone || "Non défini"}</p>
-                                <p>📍 {o.shipping_location || "Non défini"}</p>
-                                <p>🏠 {shipping.address || "Non défini"}</p>
-                                <p>🧭 {shipping.landmark || "Aucun"}</p>
-                            </div>
-                            <h4>🛒 Produits :</h4>
-                            {items.map((item, i) => (
-                                <div key={i} style={styles.item}>
-                                    <img src={item.image || "https://via.placeholder.com/60"} style={styles.img} />
-                                    <div><b>{item.title}</b><br /> {item.size || item.pointure || "N/A"} | 📦 {item.quantity} | 💰 {item.price} FCFA</div>
+                {orders.length === 0 ? (
+                    <div style={styles.emptyBox}>Aucune commande disponible pour le moment.</div>
+                ) : (
+                    orders.map((o) => {
+                        let items = [];
+                        try { items = typeof o.items === "string" ? JSON.parse(o.items) : o.items || []; } catch (e) { items = []; }
+                        const shipping = o.shipping_details || {};
+
+                        return (
+                            <div key={o.id} style={styles.card}>
+                                <div style={styles.cardHeader}>
+                                    <h3 style={styles.cardTitle}>📦 Commande #{o.id.substring(0, 8)}</h3>
+                                    <span style={{
+                                        ...styles.badge,
+                                        backgroundColor: o.status === "livraison" ? "#fef3c7" : "#e0f2fe",
+                                        color: o.status === "livraison" ? "#b45309" : "#0369a1"
+                                    }}>
+                                        {o.status}
+                                    </span>
                                 </div>
-                            ))}
-                            <p><b>Total:</b> {o.total} FCFA</p>
-                            <button onClick={() => trackingOrderId === o.id ? updateStatus(o.id, "terminée") : startTracking(o.id)}
-                                style={{ ...styles.btnAction, background: trackingOrderId === o.id ? colors.green : colors.blue }}>
-                                {trackingOrderId === o.id ? "✅ Terminer livraison" : "🚚 Accepter commande"}
-                            </button>
-                        </div>
-                    );
-                })}
+
+                                <div style={styles.infoBox}>
+                                    <p style={styles.infoText}><b>👤 Destinataire :</b> {shipping.name || "Non défini"}</p>
+                                    <p style={styles.infoText}><b>📞 Téléphone :</b> {shipping.phone || "Non défini"}</p>
+                                    <p style={styles.infoText}><b>📍 Zone :</b> {o.shipping_location || "Non défini"}</p>
+                                    <p style={styles.infoText}><b>🏠 Adresse :</b> {shipping.address || "Non défini"}</p>
+                                    <p style={styles.infoText}><b>🧭 Repère :</b> {shipping.landmark || "Aucun"}</p>
+                                </div>
+
+                                <h4 style={styles.sectionLabel}>🛒 Articles à livrer :</h4>
+                                {items.map((item, i) => (
+                                    <div key={i} style={styles.item}>
+                                        <img src={item.image || "https://via.placeholder.com/60"} style={styles.img} alt={item.title} />
+                                        <div style={styles.itemDetails}>
+                                            <b style={{ color: colors.text }}>{item.title}</b>
+                                            <span style={styles.itemMeta}>
+                                                Taille/Pointure : {item.size || item.pointure || "N/A"} | Qté : {item.quantity}
+                                            </span>
+                                            <b style={{ color: colors.blue }}>{item.price} FCFA</b>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                <div style={styles.cardFooter}>
+                                    <span style={styles.totalText}>Montant à percevoir :</span>
+                                    <span style={styles.totalAmount}>{o.total} FCFA</span>
+                                </div>
+
+                                <button onClick={() => trackingOrderId === o.id ? updateStatus(o.id, "terminée") : startTracking(o.id)}
+                                    style={{ ...styles.btnAction, background: trackingOrderId === o.id ? colors.green : colors.blue }}>
+                                    {trackingOrderId === o.id ? "✅ Terminer la livraison" : "🚚 Accepter la commande"}
+                                </button>
+                            </div>
+                        );
+                    })
+                )}
             </div>
         </div>
     );
 }
 
-// 🎨 DESIGN SYSTEM
+// 🎨 NOUVEAU DESIGN SYSTEM CONSOLIDÉ
 const styles = {
-    page: { minHeight: "100vh", background: colors.bg, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" },
-    container: { width: "100%", maxWidth: "500px" },
-    card: { background: colors.white, padding: "20px", borderRadius: "15px", marginBottom: "20px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" },
-    inputGroup: { marginBottom: "12px" },
-    input: { width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", boxSizing: "border-box" },
-    infoBox: { background: "#f8fafc", padding: "12px", borderRadius: "10px", marginBottom: "10px", borderLeft: `4px solid ${colors.blue}` },
-    item: { display: "flex", gap: "10px", padding: "10px 0", borderBottom: "1px solid #eee" },
-    img: { width: 60, height: 60, borderRadius: 8, objectFit: "cover" },
-    btnAction: { width: "100%", padding: "12px", borderRadius: "8px", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
-    btnWhatsApp: { display: "block", textAlign: "center", background: colors.orange, color: "#fff", padding: "12px", borderRadius: "10px", textDecoration: "none", fontWeight: "bold", marginTop: "15px" },
-    center: { height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }
+    page: { minHeight: "100vh", background: colors.bg, padding: "24px 16px", display: "flex", flexDirection: "column", alignItems: "center", fontFamily: "system-ui, sans-serif" },
+    container: { width: "100%", maxWidth: "480px" },
+    formCard: { background: colors.white, padding: "28px", borderRadius: "20px", boxShadow: "0 4px 18px rgba(15, 23, 42, 0.04)", border: `1px solid ${colors.border}` },
+    title: { color: colors.text, fontSize: "24px", fontWeight: "700", textAlign: "center", margin: "0 0 8px 0" },
+    subtitle: { color: colors.muted, fontSize: "14px", textAlign: "center", margin: "0 0 24px 0", lineHeight: "1.5" },
+    card: { background: colors.white, padding: "20px", borderRadius: "16px", marginBottom: "20px", boxShadow: "0 4px 12px rgba(15, 23, 42, 0.03)", border: `1px solid ${colors.border}` },
+    cardHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" },
+    cardTitle: { color: colors.text, fontSize: "16px", fontWeight: "600", margin: 0 },
+    badge: { padding: "4px 10px", borderRadius: "99px", fontSize: "12px", fontWeight: "600", textTransform: "capitalize" },
+    inputGroup: { marginBottom: "16px", display: "flex", flexDirection: "column", gap: "6px" },
+    label: { color: colors.text, fontSize: "14px", fontWeight: "600" },
+    input: { width: "100%", padding: "12px", borderRadius: "10px", border: `1px solid ${colors.border}`, boxSizing: "border-box", fontSize: "15px", color: colors.text, background: "#fff" },
+    select: { width: "100%", padding: "12px", borderRadius: "10px", border: `1px solid ${colors.border}`, boxSizing: "border-box", fontSize: "15px", color: colors.text, background: "#fff" },
+    textarea: { width: "100%", padding: "12px", borderRadius: "10px", border: `1px solid ${colors.border}`, boxSizing: "border-box", fontSize: "15px", color: colors.text, background: "#fff", height: "90px", resize: "none" },
+    infoBox: { background: "#f1f5f9", padding: "14px", borderRadius: "12px", marginBottom: "16px", borderLeft: `4px solid ${colors.blue}`, display: "flex", flexDirection: "column", gap: "6px" },
+    infoText: { color: colors.text, fontSize: "14px", margin: 0 },
+    sectionLabel: { color: colors.muted, fontSize: "13px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", margin: "0 0 10px 0" },
+    item: { display: "flex", gap: "12px", padding: "12px 0", borderBottom: `1px solid ${colors.border}` },
+    img: { width: 64, height: 64, borderRadius: 10, objectFit: "cover", background: "#eaeaea" },
+    itemDetails: { display: "flex", flexDirection: "column", gap: "2px", fontSize: "14px" },
+    itemMeta: { color: colors.muted, fontSize: "12px" },
+    cardFooter: { display: "flex", justifyContent: "space-between", alignItems: "center", margin: "16px 0", padding: "12px 0", borderTop: `1px solid ${colors.border}` },
+    totalText: { color: colors.muted, fontSize: "14px" },
+    totalAmount: { color: colors.text, fontSize: "18px", fontWeight: "700" },
+    btnAction: { width: "100%", padding: "14px", borderRadius: "12px", border: "none", color: "#fff", fontWeight: "600", fontSize: "15px", cursor: "pointer", transition: "background 0.2s" },
+    btnWhatsApp: { display: "block", width: "100%", border: "none", textAlign: "center", background: colors.orange, color: "#fff", padding: "14px", borderRadius: "12px", textDecoration: "none", fontWeight: "600", fontSize: "15px", marginTop: "8px", cursor: "pointer" },
+    center: { height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: colors.bg, color: colors.text, fontSize: "16px", fontFamily: "system-ui" },
+    emptyBox: { textAlign: "center", padding: "40px 20px", background: colors.white, borderRadius: "16px", color: colors.muted, border: `1px solid ${colors.border}` }
 };

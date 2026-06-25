@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 
 // 🎨 DESIGN SYSTEM
@@ -16,6 +17,16 @@ const theme = {
 };
 
 export default function AdminModeration() {
+
+    const navigate = useNavigate();
+
+    // 🔐 PROTECTION ADMIN
+    const isAdmin = localStorage.getItem("admin");
+
+    if (!isAdmin) {
+        return <Navigate to="/admin-login" />;
+    }
+
     const [ads, setAds] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -28,6 +39,13 @@ export default function AdminModeration() {
     useEffect(() => {
         fetchAds();
     }, []);
+
+    // 🚪 LOGOUT
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        localStorage.removeItem("admin");
+        navigate("/admin-login");
+    };
 
     async function fetchAds() {
         setLoading(true);
@@ -105,18 +123,36 @@ export default function AdminModeration() {
         setSelectedAd(null);
         fetchAds();
     }
+
     return (
         <div style={styles.page}>
             <div style={styles.wrapper}>
 
+                {/* 🔥 HEADER + LOGOUT */}
                 <div style={styles.header}>
-                    <h1 style={styles.title}>
-                        🧹 Modération ViteVendu
-                    </h1>
+                    <div>
+                        <h1 style={styles.title}>
+                            🧹 Modération ViteVendu
+                        </h1>
 
-                    <p style={styles.subtitle}>
-                        {ads.length} annonce(s)
-                    </p>
+                        <p style={styles.subtitle}>
+                            {ads.length} annonce(s)
+                        </p>
+                    </div>
+
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            background: theme.danger,
+                            color: "white",
+                            padding: "10px 15px",
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        🚪 Déconnexion
+                    </button>
                 </div>
 
                 <div style={styles.grid}>

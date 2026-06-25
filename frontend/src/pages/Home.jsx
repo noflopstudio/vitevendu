@@ -829,8 +829,6 @@ export default function Home({ ads = [], user, profile }) {
                                                 <span className="vv-stat-label">Vente rapide</span>
                                             </div>
                                         </div>
-
-
                                     </div>
 
                                     {/* ANNONCES APRÈS */}

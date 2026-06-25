@@ -46,7 +46,7 @@ import Security from "./admin/security/Security";
 import Marketplace from "./pages/Marketplace";
 import AdminModeration from "./pages/admin/AdminModeration";
 import AdminReviews from "./admin/AdminReviews";
-
+import AdminLogin from "./pages/AdminLogin.jsx";
 
 
 
@@ -948,6 +948,7 @@ export default function App() {
           <Route path="/admin/roles" element={<Roles />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/admin/analytics" element={<Analytics />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
 
           {/* USERS & ROLES */}
           <Route path="/users/roles" element={<Roles />} />
