@@ -239,7 +239,10 @@ export default function Home({ ads = [], user, profile }) {
     const middlePromo = {
         type: "image",
         src: "/Logo vvendu.jpeg",
-        title: "Boostez vos ventes ! Devenez partenaire VendiPro 🎯"
+        title: "Boostez vos ventes ! Devenez partenaire VendiPro 🎯",
+        style: {
+            animation: "promoFloat 4s ease-in-out infinite"
+        }
     };
 
     const marketingMessages = [
@@ -470,12 +473,10 @@ export default function Home({ ads = [], user, profile }) {
             {/* 🔥 MENU AJOUTÉ ICI (IMPORTANT) */}
             <MobileMenu user={user} profile={profile} />
 
-            {/* ================= MAIN CONTENT ================= */}
+
             <main style={styles.mainContent}>
                 <div style={styles.container}>
 
-
-                    {/* ================= WELCOME SECTION FIXE AVEC EFFET LUMIÈRE ================= */}
                     <>
                         <style>{`
         @keyframes shine {
@@ -527,7 +528,7 @@ export default function Home({ ads = [], user, profile }) {
                             </p>
                         </div>
                     </>
-                    {/* PREMIÈRE BANNIÈRE PUBLICITAIRE (HAUT) */}
+
                     <div style={styles.pubContainer}>
                         {promoSlides[currentPromo].type === "image" ? (
                             <img src={promoSlides[currentPromo].src} alt="Publicité" style={styles.pubImage} />
@@ -539,7 +540,6 @@ export default function Home({ ads = [], user, profile }) {
                         </div>
                     </div>
 
-                    {/* CORPS PRINCIPAL ACCUEIL */}
                     {activeSection === "home" && (
                         <>
                             <div style={styles.heroSection}>
@@ -562,7 +562,6 @@ export default function Home({ ads = [], user, profile }) {
                                 </p>
                             </div>
 
-                            {/* ================= BARRE DE RECHERCHE INTEGRÉE ================= */}
                             <div style={styles.searchContainer}>
                                 <div style={styles.searchBarWrapper}>
                                     <span style={styles.searchIcon}>🔍</span>
@@ -592,7 +591,7 @@ export default function Home({ ads = [], user, profile }) {
                                 </div>
                             ) : (
                                 <>
-                                    {/* BLOC DES 7 PREMIÈRES ANNONCES */}
+
                                     <div id="plus-offres" style={styles.categoryBlock}>
                                         <h2 style={styles.categoryTitle}>
                                             {searchQuery
@@ -611,13 +610,16 @@ export default function Home({ ads = [], user, profile }) {
                                         </div>
                                     </div>
 
-                                    {/* DEUXIÈME BANNIÈRE PUBLICITAIRE */}
                                     <div style={{ ...styles.pubContainer, margin: "40px 0" }}>
                                         {middlePromo.type === "image" ? (
                                             <img
                                                 src={middlePromo.src}
                                                 alt="Publicité Partenaire"
-                                                style={styles.pubImage}
+                                                style={{
+                                                    ...styles.pubImage,
+                                                    animation: "promoFloat 4s ease-in-out infinite",
+                                                    transition: "all 0.3s ease" // Assure la fluidité du mouvement
+                                                }}
                                             />
                                         ) : (
                                             <video
@@ -633,6 +635,22 @@ export default function Home({ ads = [], user, profile }) {
                                         <div style={styles.pubOverlay}>
                                             <h2 style={styles.pubTitle}>{middlePromo.title}</h2>
                                         </div>
+
+                                        {/* Injection correcte de l'animation CSS en React */}
+                                        <style dangerouslySetInnerHTML={{
+                                            __html: `
+        @keyframes promoFloat {
+            0% {
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                transform: scale(1.04) translateY(-6px); /* Légèrement réduit pour un effet plus pro et moins agressif */
+            }
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+    `}} />
                                     </div>
 
                                     {/* ANNONCES 8 À 21 */}
