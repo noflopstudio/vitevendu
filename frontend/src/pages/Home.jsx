@@ -473,7 +473,7 @@ export default function Home({ ads = [], user, profile }) {
             {/* 🔥 MENU AJOUTÉ ICI (IMPORTANT) */}
             <MobileMenu user={user} profile={profile} />
 
-
+            {/* ================= MAIN CONTENT ================= */}
             <main style={styles.mainContent}>
                 <div style={styles.container}>
 
@@ -617,8 +617,7 @@ export default function Home({ ads = [], user, profile }) {
                                                 alt="Publicité Partenaire"
                                                 style={{
                                                     ...styles.pubImage,
-                                                    animation: "promoFloat 4s ease-in-out infinite",
-                                                    transition: "all 0.3s ease" // Assure la fluidité du mouvement
+                                                    animation: "promoFloat 4s ease-in-out infinite"
                                                 }}
                                             />
                                         ) : (
@@ -636,21 +635,20 @@ export default function Home({ ads = [], user, profile }) {
                                             <h2 style={styles.pubTitle}>{middlePromo.title}</h2>
                                         </div>
 
-                                        {/* Injection correcte de l'animation CSS en React */}
-                                        <style dangerouslySetInnerHTML={{
-                                            __html: `
+                                        {/* Animation */}
+                                        <style>{`
         @keyframes promoFloat {
             0% {
                 transform: scale(1) translateY(0);
             }
             50% {
-                transform: scale(1.04) translateY(-6px); /* Légèrement réduit pour un effet plus pro et moins agressif */
+                transform: scale(1.06) translateY(-8px);
             }
             100% {
                 transform: scale(1) translateY(0);
             }
         }
-    `}} />
+    `}</style>
                                     </div>
 
                                     {/* ANNONCES 8 À 21 */}
