@@ -367,7 +367,7 @@ export default function Home({ ads = [], user, profile }) {
                     <div style={styles.singleRowNav}>
 
                         <img
-                            src="/icon-192.png"
+                            src="/icon.png"
                             alt="Logo"
                             onClick={() => handleNavClick("home")}
                             style={{
