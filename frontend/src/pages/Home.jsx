@@ -232,14 +232,14 @@ export default function Home({ ads = [], user, profile }) {
 
     const promoSlides = [
         { type: "image", src: "/hotel.jpeg", title: "Publiez votre annonce ici 🚀" },
-        { type: "image", src: "/ggb.jpeg", title: "Créez votre boutique gratuitement 💎" },
-        { type: "video", src: "/partenaire.mp4", title: "Découvrez ViteVendu 🎥" }
+        { type: "image", src: "/ggb.jpeg", title: "" },
+        { type: "video", src: "/partenaire.mp4", title: "" }
     ];
 
     const middlePromo = {
         type: "image",
         src: "/Logo vvendu.jpeg",
-        title: "Boostez vos ventes ! Devenez partenaire VendiPro 🎯",
+        title: "Boostez vos ventes ! 🎯",
         style: {
             animation: "promoFloat 4s ease-in-out infinite"
         }
