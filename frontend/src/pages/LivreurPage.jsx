@@ -22,6 +22,8 @@ export default function LivreurPage() {
 
     // ✍️ États pour le formulaire de candidature (Tous conservés)
     const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [age, setAge] = useState("");
     const [whatsappNum, setWhatsappNum] = useState("");
     const [zone, setZone] = useState("");
     const [experience, setExperience] = useState("");
@@ -75,20 +77,26 @@ export default function LivreurPage() {
 
     // 🚀 Fonction pour générer le lien WhatsApp dynamique (Conservée avec les nouveaux champs ajoutés)
     const handleWhatsAppSubmit = (e) => {
-        if (!fullName || !whatsappNum || !zone) {
+        if (!fullName || !email || !age || !whatsappNum || !zone) {
             e.preventDefault();
-            alert("Veuillez remplir au moins le nom, le numéro et la zone.");
+            alert("Veuillez remplir tous les champs obligatoires.");
             return;
         }
 
         const phone = "2250748922397";
-        const message = `Bonjour, je souhaite devenir livreur chez ViteVendu. Voici mes informations :
-- *Nom complet :* ${fullName}
-- *WhatsApp :* ${whatsappNum}
-- *Ville / Commune :* ${zone}
-- *Moyen de transport :* ${transport || "Non spécifié"}
-- *Disponibilité :* ${availability || "Non spécifiée"}
-- *Expérience :* ${experience || "Aucune mentionnée"}`;
+
+        const message = `🚚 Bonjour, je souhaite devenir livreur chez ViteVendu.
+
+Voici mes informations :
+
+👤 Nom complet : ${fullName}
+📧 Gmail : ${email}
+🎂 Âge : ${age} ans
+📞 WhatsApp : ${whatsappNum}
+📍 Ville / Commune : ${zone}
+🛵 Moyen de transport : ${transport || "Non spécifié"}
+🕒 Disponibilité : ${availability || "Non spécifiée"}
+🚀 Expérience : ${experience || "Aucune mentionnée"}`;
 
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
@@ -116,6 +124,28 @@ export default function LivreurPage() {
                                 style={styles.input}
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>📧 Adresse Gmail</label>
+                            <input
+                                type="email"
+                                placeholder="Ex : exemple@gmail.com"
+                                style={styles.input}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>🎂 Âge</label>
+                            <input
+                                type="number"
+                                placeholder="Ex : 25"
+                                style={styles.input}
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
                             />
                         </div>
 

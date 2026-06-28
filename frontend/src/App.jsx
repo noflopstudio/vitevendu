@@ -19,6 +19,9 @@ import ProductPage from "./pages/ProductPage";
 import TrackingMap from "./components/TrackingMap.jsx";
 import TrackingPage from "./pages/TrackingPage";
 import LivreurPage from "./pages/LivreurPage";
+import Commission from "./pages/Commission";
+import SecurityTips from "./pages/SecurityTips";
+import ReportScam from "./pages/ReportScam";
 
 import Users from "./pages/Users";
 import Orders from "./pages/Orders.jsx";
@@ -27,6 +30,7 @@ import Reviews from "./pages/Reviews.jsx";
 import Stock from "./pages/Stock.jsx";
 import AdminDashboard from "./admin/AdminDashboard";
 import Roles from "./admin/roles/Roles";
+
 
 
 import OrdersAll from "./admin/orders/OrdersAll";
@@ -47,7 +51,7 @@ import Marketplace from "./pages/Marketplace";
 import AdminModeration from "./pages/admin/AdminModeration";
 import AdminReviews from "./admin/AdminReviews";
 import AdminLogin from "./pages/AdminLogin.jsx";
-
+import AdminReports from "./pages/admin/AdminReports";
 
 
 function Dashboard({ user, profile, ads, fetchAds }) {
@@ -929,6 +933,9 @@ export default function App() {
           <Route path="/partner" element={<Partner />} />
           <Route path="/messages" element={<MessagesList />} />
           <Route path="/cart" element={<Cart user={user} />} />
+          <Route path="/commission" element={<Commission />} />
+          <Route path="/security-tips" element={<SecurityTips />} />
+          <Route path="/report" element={<ReportScam />} />
 
           <Route path="/client" element={<ClientDashboard />} />
           <Route path="/product/:id" element={<ProductPage />} />
@@ -949,9 +956,10 @@ export default function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/admin/analytics" element={<Analytics />} />
           <Route path="/admin-login" element={<AdminLogin />} />
-
+          <Route path="/admin/reports" element={<AdminReports />} />
           {/* USERS & ROLES */}
           <Route path="/users/roles" element={<Roles />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
 
 
           {/* ORDERS */}

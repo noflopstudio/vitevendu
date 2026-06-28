@@ -111,10 +111,22 @@ export default function MobileMenu({ profile }) {
 
                     label: "📜 reviews"
 
-                }
+                },
 
+                {
+                    path: "/commission",
+                    label: "💰 Commission ViteVendu"
+                },
+                {
+                    path: "/security-tips",
+                    label: "🛡️ Conseils de sécurité"
+                },
+                {
+                    path: "/admin/reports",
+                    label: "🚨 Signalements arnaques"
+                }
             ]
-        }
+        },
 
     ] : [
 
@@ -126,7 +138,8 @@ export default function MobileMenu({ profile }) {
                 { path: "/marketplace", label: "🛍️ Marketplace" }, // 🆕
                 { path: "/cart", label: "🛒 Mon Panier" },
                 { path: "/messages", label: "💬 Messagerie" },
-                { path: "/orders", label: "📦 Mes commandes" }
+                { path: "/orders", label: "📦 Mes commandes" },
+                { path: "/commission", label: "💰 Commission ViteVendu" }
             ]
         },
 
@@ -155,7 +168,9 @@ export default function MobileMenu({ profile }) {
             title: "🤝 RÉSEAU",
             roles: ["client", "vendeur", "livreur"],
             items: [
-                { path: "/partner", label: "🤝 Club partenaires" }
+                { path: "/partner", label: "🤝 Club partenaires" },
+                { path: "/security-tips", label: "🛡️ Conseils de sécurité" },
+                { path: "/report", label: "🚨 Signalement sécurité" }
             ]
         }
     ];
@@ -304,20 +319,20 @@ const styles = {
     },
 
     header: {
-        padding: "24px 20px",
-        borderBottom: "1px solid #f1f5f9",
-        marginTop: "55px",
+        position: "relative",
         display: "flex",
-        flexDirection: "column",
-        gap: "6px"
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "8px 0",
+        marginBottom: "10px"
     },
 
     title: {
         margin: 0,
-        fontSize: "24px",
+        fontSize: "16px",
         fontWeight: "900",
-        letterSpacing: "-0.5px",
-        // Styles pour le dégradé animé Vert / Bleu
+        transform: "translateX(-8px)",
+
         background: "linear-gradient(270deg, #10b981, #3b82f6, #10b981)",
         backgroundSize: "200% auto",
         WebkitBackgroundClip: "text",
@@ -326,14 +341,25 @@ const styles = {
     },
 
     roleBadge: {
-        display: "inline-flex",
+        position: "absolute",
+        right: "6px",
+        top: "50%",
+        transform: "translateY(-50%)",
+
+        display: "flex",
         alignItems: "center",
-        gap: "6px",
-        background: "#f8fafc",
-        border: "1px solid #e2e8f0",
-        padding: "3px 10px",
+        gap: "4px",
+
+        padding: "3px 8px",
         borderRadius: "6px",
-        alignSelf: "flex-start"
+
+        fontSize: "10px",
+        fontWeight: "700",
+
+        background: "#e2e8f0",
+        color: "#0f172a",
+
+        zIndex: 9999
     },
 
     roleDot: {
@@ -402,5 +428,46 @@ const styles = {
         textAlign: "center",
         color: "#94a3b8",
         borderTop: "1px solid #f1f5f9"
+    },
+
+    section: {
+        marginBottom: "16px",
+        background: "#ffffff",
+        borderRadius: "16px",
+        padding: "12px",
+        border: "1px solid #e2e8f0"
+    },
+
+    sectionTitle: {
+        fontSize: "12px",
+        fontWeight: "800",
+        color: "#64748b",
+        marginBottom: "10px",
+        letterSpacing: "0.5px"
+    },
+
+    itemContainer: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "6px"
+    },
+
+    item: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 12px",
+        borderRadius: "10px",
+        border: "none",
+        cursor: "pointer",
+        width: "100%",
+        textAlign: "left",
+        transition: "all 0.2s ease"
+    },
+
+    activeCheck: {
+        fontSize: "14px",
+        color: "#22c55e",
+        fontWeight: "900"
     }
 };
