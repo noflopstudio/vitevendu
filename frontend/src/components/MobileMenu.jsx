@@ -265,7 +265,7 @@ export default function MobileMenu({ profile }) {
     );
 }
 
-// ================= DESIGN SYSTEM OPTIMISÉ =================
+
 const styles = {
     burgerBtn: {
         position: "fixed",
@@ -400,19 +400,23 @@ const styles = {
         flexDirection: "column",
         gap: "2px"
     },
-
     item: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+
+        padding: "13px 14px",
+        borderRadius: "10px",
+        border: "none",
+        cursor: "pointer",
         width: "100%",
         textAlign: "left",
-        padding: "11px 14px",
-        border: "none",
-        borderRadius: "8px",
-        fontSize: "14px",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        transition: "all 0.15s ease"
+
+        fontSize: "17px",   // 🔥 PLUS GRAND
+        fontWeight: "600",
+
+        color: "#0f172a",
+        transition: "all 0.2s ease"
     },
 
     activeCheck: {
@@ -469,5 +473,31 @@ const styles = {
         fontSize: "14px",
         color: "#22c55e",
         fontWeight: "900"
+    },
+    content: {
+        flex: 1,
+        padding: "16px 12px",
+        overflowY: "auto",
+        fontSize: "15px",
+        lineHeight: "1.4"
+    },
+    sectionTitle: {
+        fontSize: "13px",
+        fontWeight: "800",
+        color: "#64748b",
+        marginBottom: "10px",
+        letterSpacing: "0.5px"
+    },
+    itemContainer: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px"   // 🔥 plus aéré
+    },
+    content: {
+        flex: 1,
+        padding: "18px 12px",
+        overflowY: "auto",
+        fontSize: "15px",
+        lineHeight: "1.5"
     }
 };
