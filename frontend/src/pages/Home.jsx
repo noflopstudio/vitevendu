@@ -417,7 +417,8 @@ export default function Home({ ads = [], user, profile }) {
                             <span>{cartCount > 0 ? `Panier (${cartCount})` : "Vide"}</span>
                         </button>
                         <a
-                            href="https://vitevendu-qkwijbhja-yelojoel1-7044s-projects.vercel.app/app.apk"
+                            href="/app.apk"
+                            download="ViteVendu.apk"
                             style={{
                                 background: "#f1f5f9",
                                 border: "none",
@@ -432,8 +433,6 @@ export default function Home({ ads = [], user, profile }) {
                                 cursor: "pointer",
                                 textDecoration: "none"
                             }}
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
