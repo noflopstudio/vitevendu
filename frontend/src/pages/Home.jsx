@@ -238,7 +238,7 @@ export default function Home({ ads = [], user, profile }) {
 
     const middlePromo = {
         type: "image",
-        src: "/Logo vvendu.jpeg",
+        src: "/Logo og-image.png",
         title: "Boostez vos ventes ! 🎯",
         style: {
             animation: "promoFloat 4s ease-in-out infinite"
