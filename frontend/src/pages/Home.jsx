@@ -233,8 +233,12 @@ export default function Home({ ads = [], user, profile }) {
     const promoSlides = [
         { type: "image", src: "/hotel.jpeg", title: "Publiez votre annonce ici 🚀" },
         { type: "image", src: "/ggb.jpeg", title: "" },
-        { type: "video", src: "/partenaire.mp4", title: "" }
+        { type: "video", src: "/partenaire.mp4", title: "" },
+        { type: "image", src: "/Pub2 Vitevendu.png", title: "" },
+        { type: "image", src: "/Pub Partenaire.png", title: "" },
+        { type: "image", src: "/Pub 4.png", title: "" },
     ];
+
 
     const middlePromo = {
         type: "image",
@@ -247,9 +251,9 @@ export default function Home({ ads = [], user, profile }) {
 
     const marketingMessages = [
         { text: "Le commerce en direct, sans intermédiaire.", color: "linear-gradient(135deg, #2563eb, #1e40af)" }, // Bleu
-        { text: "Créez votre micro-boutique en moins de 2 minutes.", color: "linear-gradient(135deg, #10b981, #059669)" }, // Vert émeraude
-        { text: "Discutez instantanément via WhatsApp.", color: "linear-gradient(135deg, #2563eb, #1e40af)" }, // Bleu
-        { text: "Zéro commission, 100% de vos gains en poche.", color: "linear-gradient(135deg, #f97316, #ea580c)" } // Orange
+        { text: "Créez votre boutique en ligne en quelques clics.", color: "linear-gradient(135deg, #10b981, #059669)" }, // Vert émeraude
+        { text: "Discutez directement avec le vendeur.", color: "linear-gradient(135deg, #2563eb, #1e40af)" }, // Bleu
+        { text: "Vendez et gardez l’essentiel. 1 000 FCFA par vente.", color: "linear-gradient(135deg, #f97316, #ea580c)" } // Orange
     ];
 
     useEffect(() => {
@@ -946,5 +950,9 @@ const styles = {
     footer: { textAlign: "center", padding: "40px 0 20px 0", borderTop: "1px solid #f1f5f9", marginTop: "48px" },
     footerLinksRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: "12px", flexWrap: "wrap", marginBottom: "16px" },
     footerLink: { background: "none", border: "none", color: "#475569", fontSize: "13px", fontWeight: "600", padding: "6px 8px", cursor: "pointer", whiteSpace: "nowrap", transition: "color 0.15s ease" },
-    copyrightText: { fontSize: "11px", color: "#94a3b8" }
+    copyrightText: { fontSize: "11px", color: "#94a3b8" }, style: {
+        width: "200px",
+        height: "auto",
+        animation: "promoFloat 4s ease-in-out infinite"
+    },
 };
