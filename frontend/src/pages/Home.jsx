@@ -562,7 +562,7 @@ export default function Home({ ads = [], user, profile }) {
                                     </div>
                                 </h1>
                                 <p style={styles.heroSubtitle}>
-                                    Explorez les catalogues de nos marchands locaux, découvrez des produits uniques et échangez directement sans intermédiaire.
+                                    Vite Vendu est une marketplace en Côte d’Ivoire pour acheter et vendre des produits neufs et d’occasion. Créez votre boutique, publiez vos annonces et discutez directement avec les vendeurs.
                                 </p>
                             </div>
 
