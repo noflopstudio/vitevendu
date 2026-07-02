@@ -183,7 +183,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           <span style={{ fontSize: "54px", display: "block", marginBottom: "16px" }}>🔒</span>
           <h2 style={{ ...styles.authTitle, marginBottom: "10px" }}>Accès au Dashboard Suspendu</h2>
           <p style={{ ...styles.authSubtitle, lineHeight: "1.6", marginBottom: "24px" }}>
-            Votre période d'abonnement au Plan Pro a expiré ou n'est pas encore active. Veuillez régulariser votre situation pour débloquer vos outils de gestion.
+            Votre accès au Dashboard Pro est temporairement désactivé. Activez votre abonnement pour continuer à gérer vos annonces et vos ventes sur ViteVendu.
           </p>
 
           <div style={{
@@ -419,6 +419,17 @@ function Dashboard({ user, profile, ads, fetchAds }) {
 
       {/* ===================== SIDEBAR ===================== */}
       <aside style={styles.sidebar}>
+        <div style={{
+          background: "#e8f5e9",
+          padding: "10px",
+          borderRadius: "8px",
+          marginTop: "12px",
+          border: "1px solid #a5d6a7",
+          fontSize: "13px",
+          lineHeight: "1.4" // Ajouté pour une meilleure lisibilité du texte long
+        }}>
+          📸 📸 <strong>Astuce :</strong> Les photos claires et réelles augmentent vos ventes. Les images floues ou non conformes peuvent être supprimées.
+        </div>
 
         {/* USER CARD */}
         <div style={styles.userCard}>
@@ -438,6 +449,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               <div style={styles.avatarOverlay}>📷</div>
             </label>
           </div>
+
 
           <div style={styles.profileContent}>
             <span style={styles.profileRoleBadge}>Marchand</span>
