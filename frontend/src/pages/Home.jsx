@@ -418,7 +418,8 @@ export default function Home({ ads = [], user, profile }) {
                         </button>
                         <a
                             href="/app.apk"
-                            download="ViteVendu.apk"
+                            download
+                            type="application/vnd.android.package-archive"
                             style={{
                                 background: "#f1f5f9",
                                 border: "none",
