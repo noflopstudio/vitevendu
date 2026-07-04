@@ -12,6 +12,7 @@ import MessagesList from "./pages/MessagesList";
 import Cart from "./pages/Cart.jsx";
 import Analytics from "./admin/analytics/Analytics";
 import Profile from "./pages/Profile";
+import InstallGuide from "./pages/InstallGuide";
 
 import SellerDashboard from "./pages/SellerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
@@ -951,6 +952,8 @@ export default function App() {
           <Route path="/commission" element={<Commission />} />
           <Route path="/security-tips" element={<SecurityTips />} />
           <Route path="/report" element={<ReportScam />} />
+          <Route path="/install" element={<InstallGuide />} />
+          <Route path="/install-guide" element={<InstallGuide />} />
 
           <Route path="/client" element={<ClientDashboard />} />
           <Route path="/product/:id" element={<ProductPage />} />

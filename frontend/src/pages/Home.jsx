@@ -1,9 +1,11 @@
 import { PushNotifications } from '@capacitor/push-notifications';
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import { useCartStore } from "../store/cartStore";
 import MobileMenu from "../components/MobileMenu";
+import InstallPopup from "../components/InstallPopup";
 
 function ProductCard({ ad, navigate }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -416,10 +418,10 @@ export default function Home({ ads = [], user, profile }) {
                             </svg>
                             <span>{cartCount > 0 ? `Panier (${cartCount})` : "Vide"}</span>
                         </button>
-                        <a
-                            href="/vitevendu.apk"
-                            download
-                            type="application/vnd.android.package-archive"
+
+
+                        <Link
+                            to="/install"
                             style={{
                                 background: "#f1f5f9",
                                 border: "none",
@@ -451,7 +453,7 @@ export default function Home({ ads = [], user, profile }) {
                             </svg>
 
                             Télécharger
-                        </a>
+                        </Link>
 
                         {/* BOUTON CONNEXION */}
                         {!user && (
@@ -475,64 +477,71 @@ export default function Home({ ads = [], user, profile }) {
                 </div>
             </header>
 
-            {/* 🔥 MENU AJOUTÉ ICI (IMPORTANT) */}
+            {/* 🔥 MENU */}
             <MobileMenu user={user} profile={profile} />
 
             {/* ================= MAIN CONTENT ================= */}
             <main style={styles.mainContent}>
+
+                {/* 👇 POPUP ICI (OK) */}
+                <InstallPopup />
+
                 <div style={styles.container}>
 
-                    <>
-                        <style>{`
-        @keyframes shine {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-        .shimmer-text {
-            background: linear-gradient(90deg, #4f46e5 0%, #10b981 25%, #ffffff 50%, #10b981 75%, #4f46e5 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 4s linear infinite;
-        }
-    `}</style>
+                    <style>{`
+            @keyframes shine {
+                0% { background-position: -200% center; }
+                100% { background-position: 200% center; }
+            }
 
-                        <div style={{
-                            position: "sticky",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 1000,
-                            backgroundColor: "#ffffff",
-                            textAlign: "center",
-                            padding: "24px 16px",
-                            marginTop: "-10px",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-                            borderBottom: "1px solid #f1f5f9"
+            .shimmer-text {
+                background: linear-gradient(
+                    90deg,
+                    #4f46e5 0%,
+                    #10b981 25%,
+                    #ffffff 50%,
+                    #10b981 75%,
+                    #4f46e5 100%
+                );
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: shine 4s linear infinite;
+            }
+        `}</style>
+
+                    {/* HEADER */}
+                    <div style={{
+                        position: "sticky",
+                        top: 0,
+                        zIndex: 1000,
+                        backgroundColor: "#ffffff",
+                        textAlign: "center",
+                        padding: "24px 16px",
+                        marginTop: "-10px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                        borderBottom: "1px solid #f1f5f9"
+                    }}>
+
+                        <h1 className="shimmer-text" style={{
+                            fontSize: "50px",
+                            fontWeight: "900",
+                            margin: 0
                         }}>
-                            <h1 className="shimmer-text" style={{
-                                fontSize: "50px",
-                                fontWeight: "900",
-                                margin: 0,
-                                letterSpacing: "-0.5px"
-                            }}>
-                                Bienvenue sur Vite Vendu 🚀
-                            </h1>
+                            Bienvenue sur Vite Vendu 🚀
+                        </h1>
 
-                            <p style={{
-                                marginTop: "8px",
-                                fontSize: "14px",
-                                color: "#64748b",
-                                fontWeight: "500",
-                                maxWidth: "450px",
-                                marginRight: "auto",
-                                marginLeft: "auto",
-                                lineHeight: "1.4"
-                            }}>
-                                Achetez, vendez et discutez directement avec les vendeurs en toute simplicité
-                            </p>
-                        </div>
-                    </>
+                        <p style={{
+                            marginTop: "8px",
+                            fontSize: "14px",
+                            color: "#64748b",
+                            fontWeight: "500"
+                        }}>
+                            Achetez, vendez et discutez directement avec les vendeurs
+                        </p>
+
+                    </div>
+
 
                     <div style={styles.pubContainer}>
                         {promoSlides[currentPromo].type === "image" ? (
