@@ -417,7 +417,7 @@ export default function Home({ ads = [], user, profile }) {
                             <span>{cartCount > 0 ? `Panier (${cartCount})` : "Vide"}</span>
                         </button>
                         <a
-                            href="/app.apk"
+                            href="/vitevendu.apk"
                             download
                             type="application/vnd.android.package-archive"
                             style={{
