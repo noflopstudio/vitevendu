@@ -66,6 +66,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   const [editingAdId, setEditingAdId] = useState(null);
   const [productType, setProductType] = useState("other");
   const [stock, setStock] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [variants, setVariants] = useState({
     colors: [],
@@ -421,14 +422,16 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       <aside style={styles.sidebar}>
         <div style={{
           background: "#e8f5e9",
-          padding: "10px",
-          borderRadius: "8px",
+          padding: "12px",
+          borderRadius: "10px",
           marginTop: "12px",
           border: "1px solid #a5d6a7",
           fontSize: "13px",
-          lineHeight: "1.4" // Ajouté pour une meilleure lisibilité du texte long
+          lineHeight: "1.4"
         }}>
-          📸 📸 <strong>Astuce :</strong> Les photos claires et réelles augmentent vos ventes. Les images floues ou non conformes peuvent être supprimées.
+          📸 <strong>Conseil important :</strong><br />
+          Utilisez des photos claires et réelles pour augmenter vos ventes.<br />
+          Les images floues ou non conformes peuvent être supprimées.
         </div>
 
         {/* USER CARD */}
@@ -1037,23 +1040,37 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
   const navigate = useNavigate();
   const [isSignUpMode, setIsSignUpMode] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div style={styles.authWrapper}>
       <div style={styles.authCard}>
         <div style={styles.authHeader}>
           <div style={styles.corporateLogo}>📦</div>
+
           <h2 style={styles.authTitle}>
             {isSignUpMode ? "Créer un espace" : "Bienvenue"}
           </h2>
+
           <p style={styles.authSubtitle}>
-            {isSignUpMode ? "Inscrivez votre micro-boutique en ligne" : "Connectez-vous à votre espace marchand"}
+            {isSignUpMode
+              ? "Inscrivez votre micro-boutique en ligne"
+              : "Connectez-vous à votre espace marchand"}
           </p>
         </div>
 
         <form
-          style={{ ...styles.authForm, display: "flex", flexDirection: "column", gap: "16px" }}
-          onSubmit={(e) => handleLoginSubmit(e, navigate, isSignUpMode)}
+          style={{
+            ...styles.authForm,
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+          onSubmit={(e) =>
+            handleLoginSubmit(e, navigate, isSignUpMode)
+          }
         >
+          {/* EMAIL */}
           <input
             style={styles.proInput}
             type="email"
@@ -1062,29 +1079,67 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
-            style={styles.proInput}
-            type="password"
-            placeholder="Mot de passe *"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" style={{ ...styles.proBtnPrimary, width: "100%", cursor: "pointer" }}>
-            {isSignUpMode ? "S'inscrire et Ouvrir ma boutique" : "Se connecter"}
+
+          {/* PASSWORD WITH TOGGLE */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              style={styles.proInput}
+              type={showPassword ? "text" : "password"}
+              placeholder="Mot de passe *"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "14px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "18px",
+                userSelect: "none",
+              }}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </span>
+          </div>
+
+          {/* BUTTON */}
+          <button
+            type="submit"
+            style={{
+              ...styles.proBtnPrimary,
+              width: "100%",
+              cursor: "pointer",
+            }}
+          >
+            {isSignUpMode
+              ? "S'inscrire et Ouvrir ma boutique"
+              : "Se connecter"}
           </button>
         </form>
 
+        {/* SWITCH MODE */}
         <div style={{ marginTop: "24px", textAlign: "center" }}>
           <button
             type="button"
             onClick={() => setIsSignUpMode(!isSignUpMode)}
             style={{
-              background: "none", border: "none", color: "#4f46e5",
-              cursor: "pointer", fontSize: "14px", fontWeight: "600", textDecoration: "underline"
+              background: "none",
+              border: "none",
+              color: "#4f46e5",
+              cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "600",
+              textDecoration: "underline",
             }}
           >
-            {isSignUpMode ? "Déjà un compte ? Connectez-vous" : "Nouveau vendeur ? Créez un compte ici"}
+            {isSignUpMode
+              ? "Déjà un compte ? Connectez-vous"
+              : "Nouveau vendeur ? Créez un compte ici"}
           </button>
         </div>
       </div>
@@ -1213,9 +1268,18 @@ const styles = {
     display: "flex", flexDirection: "column", gap: "14px"
   },
   sidebarInput: {
-    width: "100%", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e2e8f0",
-    background: "#f8fafc", fontSize: "14px", boxSizing: "border-box", outline: "none", fontFamily: "inherit"
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e2e8f0",
+    background: "#f8fafc",
+    color: "#1f2937",
+    fontSize: "14px",
+    boxSizing: "border-box",
+    outline: "none",
+    fontFamily: "inherit"
   },
+
   sidebarTextarea: {
     width: "100%", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e2e8f0",
     background: "#f8fafc", fontSize: "14px", minHeight: "120px", maxHeight: "300px",
@@ -1313,8 +1377,18 @@ const styles = {
     margin: 0, fontSize: "14px", color: "#64748b", fontWeight: "500"
   },
   proInput: {
-    width: "100%", padding: "14px 16px", borderRadius: "14px", border: "1px solid #e2e8f0", background: "#f8fafc", fontSize: "15px", outline: "none", boxSizing: "border-box", fontFamily: "inherit"
+    width: "100%",
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid #e2e8f0",
+    backgroundColor: "#f8fafc",
+    color: "#111827",
+    fontSize: "15px",
+    outline: "none",
+    boxSizing: "border-box",
+    fontFamily: "inherit"
   },
+
   proBtnPrimary: {
     width: "100%", background: "linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)", color: "#ffffff", border: "none", padding: "14px", borderRadius: "14px", fontWeight: "700", fontSize: "15px", boxShadow: "0 6px 20px rgba(79, 70, 229, 0.23)", cursor: "pointer", fontFamily: "inherit", boxSizing: "border-box"
   },

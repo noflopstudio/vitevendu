@@ -53,11 +53,12 @@ export default function AdminModeration() {
         const { data, error } = await supabase
             .from("ads")
             .select(`
-                *,
-                profiles (
-                    email
-                )
-            `)
+        *,
+        profiles (
+            email,
+            is_verified
+        )
+    `)
             .order("created_at", {
                 ascending: false
             });
@@ -104,7 +105,6 @@ export default function AdminModeration() {
 
         alert("✅ Vendeur banni.");
     }
-
     async function updateAd() {
         const { error } = await supabase
             .from("ads")
@@ -121,6 +121,23 @@ export default function AdminModeration() {
         }
 
         setSelectedAd(null);
+        fetchAds();
+    }
+
+    async function verifyUser(userId) {
+        const { error } = await supabase
+            .from("profiles")
+            .update({
+                is_verified: true
+            })
+            .eq("id", userId);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        alert("✅ Vendeur vérifié !");
         fetchAds();
     }
 
@@ -179,6 +196,20 @@ export default function AdminModeration() {
 
                                 <div style={styles.email}>
                                     👤 {ad.profiles?.email || "Inconnu"}
+
+                                    {ad.profiles?.is_verified && (
+                                        <span style={{
+                                            background: "#e0f2fe",
+                                            color: "#0369a1",
+                                            padding: "3px 8px",
+                                            borderRadius: "6px",
+                                            fontSize: "12px",
+                                            marginLeft: "8px",
+                                            fontWeight: "600"
+                                        }}>
+                                            ✔ Vérifié
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div style={styles.buttons}>
