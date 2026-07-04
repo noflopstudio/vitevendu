@@ -14,11 +14,32 @@ export default function InstallGuide() {
 
                 <hr />
 
-                <h2>🤖 Android (Chrome)</h2>
+                <h2>🤖 Android</h2>
+
                 <ul>
-                    <li>Ouvre le site dans Chrome</li>
-                    <li>Appuie sur ⋮ (menu)</li>
-                    <li>Cliquer “Installer l’application”</li>
+                    <li>
+                        Lors de la première visite sur <b>vite-vendu.com</b> avec le navigateur Chrome,
+                        une option peut apparaître pour installer l’application (PWA).
+                    </li>
+
+                    <li>
+                        Cette option dépend du navigateur et peut apparaître sous forme de bouton
+                        “Installer l’application” ou “Ajouter à l’écran d’accueil”.
+                    </li>
+
+                    <li>
+                        Si vous ne voyez pas cette option, continuez simplement à utiliser le site normalement.
+                    </li>
+
+                    <li>
+                        Le navigateur peut proposer l’installation à nouveau lors d’une prochaine visite,
+                        sans action particulière de votre part.
+                    </li>
+
+                    <li>
+                        Une fois accepté, ViteVendu sera installé sur votre téléphone comme une application,
+                        sans téléchargement APK.
+                    </li>
                 </ul>
 
                 <h2>🍎 iPhone (Safari)</h2>
@@ -40,8 +61,8 @@ export default function InstallGuide() {
 
 const styles = {
     container: {
-        minHeight: "100vh",
-        background: "#f1f5f9", // Fond gris clair/bleuté pour faire claquer le blanc
+        minHeight: "100dvh", // ✅ FIX iPhone + PWA
+        background: "#f1f5f9",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

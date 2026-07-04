@@ -6,6 +6,7 @@ import { supabase } from "../supabaseClient";
 import { useCartStore } from "../store/cartStore";
 import MobileMenu from "../components/MobileMenu";
 import InstallPopup from "../components/InstallPopup";
+import InstallButton from "../components/InstallButton";
 
 function ProductCard({ ad, navigate }) {
     const [isHovered, setIsHovered] = useState(false);

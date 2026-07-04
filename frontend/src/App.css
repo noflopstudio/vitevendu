@@ -345,6 +345,16 @@ body {
     /* 1 seule annonce par ligne sur téléphone */
     padding: 10px;
   }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #f1f5f9;
+  }
+
 }
 
 /* <--- Déplacement de l'accolade de fermeture ici pour tout englober proprement */
