@@ -1281,9 +1281,21 @@ const styles = {
   },
 
   sidebarTextarea: {
-    width: "100%", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e2e8f0",
-    background: "#f8fafc", fontSize: "14px", minHeight: "120px", maxHeight: "300px",
-    overflowY: "auto", resize: "vertical", boxSizing: "border-box", outline: "none", lineHeight: "1.5", fontFamily: "inherit"
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e2e8f0",
+    background: "#f8fafc",
+    color: "#111827", // ✅ AJOUT IMPORTANT
+    fontSize: "14px",
+    minHeight: "120px",
+    maxHeight: "300px",
+    overflowY: "auto",
+    resize: "vertical",
+    boxSizing: "border-box",
+    outline: "none",
+    lineHeight: "1.5",
+    fontFamily: "inherit"
   },
   uploadZone: {
     padding: "16px", border: "2px dashed #cbd5e1", borderRadius: "12px",
