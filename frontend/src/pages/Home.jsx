@@ -103,7 +103,18 @@ function ProductCard({ ad, navigate }) {
         >
             {/* IMAGE PRODUIT */}
             <div style={{ ...styles.imageWrapper, position: "relative" }}>
-                {ad.image ? (
+
+                {ad.images && ad.images.length > 0 ? (
+                    <img
+                        src={ad.images[0]}
+                        alt={ad.title || "Produit"}
+                        style={{
+                            ...styles.cardImage,
+                            transform: isHovered ? "scale(1.05)" : "scale(1)",
+                            transition: "transform 0.25s ease"
+                        }}
+                    />
+                ) : ad.image ? (
                     <img
                         src={ad.image}
                         alt={ad.title || "Produit"}
@@ -117,6 +128,7 @@ function ProductCard({ ad, navigate }) {
                     <div style={styles.noImage}>📷 Pas de visuel</div>
                 )}
 
+                {/* BADGE PROMO */}
                 {oldPrice > currentPrice && currentPrice > 0 && (
                     <div
                         style={{

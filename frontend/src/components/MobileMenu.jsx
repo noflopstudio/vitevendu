@@ -147,7 +147,7 @@ export default function MobileMenu({ profile }) {
             title: "🏪 VENDEUR",
             roles: ["vendeur"],
             items: [
-                { path: "/dashboard", label: "📊 Tableau de bord" },
+                { path: "/dashboard", label: "📝 Publier une annonce" },
                 { path: "/seller", label: "🏪 Ma Boutique" },
 
                 { path: "/wallet", label: "💰 Revenus / Wallet" },

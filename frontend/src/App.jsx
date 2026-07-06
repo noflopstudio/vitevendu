@@ -63,7 +63,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   const [price, setPrice] = useState("");
   const [oldPrice, setOldPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [editingAdId, setEditingAdId] = useState(null);
   const [productType, setProductType] = useState("other");
   const [stock, setStock] = useState(0);
@@ -232,7 +232,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     setPrice(ad.price.toString());
     setOldPrice(ad.old_price ? ad.old_price.toString() : "");
     setDescription(ad.description || "");
-    setImage(null); // On reset l'input image (on garde l'ancienne en BDD sauf si nouvelle sélectionnée)
+    setImages([]); // On reset l'input image (on garde l'ancienne en BDD sauf si nouvelle sélectionnée)
   };
 
   const cancelEdit = () => {
@@ -241,7 +241,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     setPrice("");
     setOldPrice("");
     setDescription("");
-    setImage(null);
+    setImages([]);
   };
 
   /* ===== ACTION SUPPRESSION ===== */
@@ -265,28 +265,33 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       sizes: variants.sizes || []
     };
 
-    let imageUrl = null;
+    let imageUrls = [];
 
-    if (image) {
-      const cleanName = image.name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9.\-_]/g, "_");
+    if (images.length > 0) {
+      for (const image of images) {
 
-      const fileName = `${Date.now()}-${cleanName}`;
+        const cleanName = image.name
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-zA-Z0-9.\-_]/g, "_");
 
-      const { data, error } = await supabase.storage
-        .from("images")
-        .upload(fileName, image);
+        const fileName = `${Date.now()}-${cleanName}`;
 
-      if (error) {
-        console.log("UPLOAD ERROR:", error);
-        return alert(error.message);
+        const { data, error } = await supabase.storage
+          .from("images")
+          .upload(fileName, image);
+
+        if (error) {
+          console.log(error);
+          return alert(error.message);
+        }
+
+        const publicUrl = supabase.storage
+          .from("images")
+          .getPublicUrl(data.path).data.publicUrl;
+
+        imageUrls.push(publicUrl);
       }
-
-      imageUrl = supabase.storage
-        .from("images")
-        .getPublicUrl(data.path).data.publicUrl;
     }
 
     // NORMALISATION DES PRIX
@@ -302,7 +307,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           price: priceValue,
           old_price: oldPriceValue,
           description,
-          image: imageUrl || undefined,
+          images: imageUrls.length > 0 ? imageUrls : undefined,
           variants: variantsData,
           stock: Number(stock),
         })
@@ -323,7 +328,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           price: priceValue,
           old_price: oldPriceValue,
           description,
-          image: imageUrl,
+          images: imageUrls,
           user_id: user.id,
           type: productType,
           variants: variantsData,
@@ -343,7 +348,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     setPrice("");
     setOldPrice("");
     setDescription("");
-    setImage(null);
+    setImages([]);
 
     fetchAds();
   };
@@ -600,16 +605,42 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               />
             </div>
 
-            {/* IMAGE */}
+            {/* IMAGES */}
             <label style={styles.uploadZone}>
-              📷 {image ? "Image OK" : "Ajouter image"}
+              📷 {images.length > 0
+                ? `${images.length} image(s) sélectionnée(s)`
+                : "Ajouter jusqu'à 8 images"}
+
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 style={{ display: "none" }}
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={(e) => {
+                  const files = Array.from(e.target.files);
+
+                  if (files.length > 8) {
+                    alert("Vous pouvez sélectionner au maximum 8 images.");
+                    return;
+                  }
+
+                  setImages(files);
+                }}
               />
             </label>
+
+            {images.length > 0 && (
+              <div style={styles.previewContainer}>
+                {images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(img)}
+                    alt={`Aperçu ${index + 1}`}
+                    style={styles.previewImage}
+                  />
+                ))}
+              </div>
+            )}
 
             <button type="submit" style={styles.proBtnPrimary}>
               {editingAdId ? "Modifier" : "Publier"}
@@ -659,9 +690,15 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               {myAds.map((ad) => (
                 <div key={ad.id} style={styles.cleanCard}>
 
-                  {/* Conteneur d'image pour un rendu propre sans déformation */}
+                  {/* Conteneur d'image */}
                   <div style={styles.cardImageContainer}>
-                    {ad.image ? (
+                    {ad.images && ad.images.length > 0 ? (
+                      <img
+                        src={ad.images[0]}
+                        alt={ad.title}
+                        style={styles.cardImg}
+                      />
+                    ) : ad.image ? (
                       <img
                         src={ad.image}
                         alt={ad.title}
@@ -1409,5 +1446,21 @@ const styles = {
   },
   proBtnSecondary: {
     width: "100%", background: "none", color: "#64748b", border: "1px solid #e2e8f0", padding: "12px", borderRadius: "14px", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s", fontFamily: "inherit", boxSizing: "border-box"
+  },
+
+
+  previewContainer: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "15px",
+    flexWrap: "wrap"
+  },
+
+  previewImage: {
+    width: "80px",
+    height: "80px",
+    objectFit: "cover",
+    borderRadius: "10px",
+    border: "1px solid #ddd"
   }
 };

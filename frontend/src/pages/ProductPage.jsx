@@ -1,5 +1,5 @@
 // 1. LES IMPORTS TOUJOURS TOUT EN HAUT DU FICHIER 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
 
@@ -9,6 +9,15 @@ export default function ProductPage() {
     const location = useLocation();
 
     const [product, setProduct] = useState(location.state?.product || null);
+    const [mainImage, setMainImage] = useState(
+        product?.images?.[0] || product?.image || null
+    );
+
+    useEffect(() => {
+        if (product) {
+            setMainImage(product?.images?.[0] || product?.image || null);
+        }
+    }, [product]);
 
     let variants = {
         colors: [],
@@ -54,6 +63,27 @@ export default function ProductPage() {
     const averageRating = hasReviews
         ? (localReviews.reduce((acc, rev) => acc + rev.rating, 0) / localReviews.length).toFixed(1)
         : null;
+
+    const imagesList =
+        product?.images?.length > 0
+            ? product.images
+            : product?.image
+                ? [product.image]
+                : [];
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const nextImage = () => {
+        setCurrentIndex((prev) =>
+            prev === imagesList.length - 1 ? 0 : prev + 1
+        );
+    };
+
+    const prevImage = () => {
+        setCurrentIndex((prev) =>
+            prev === 0 ? imagesList.length - 1 : prev - 1
+        );
+    };
 
     // Partage propre de l'annonce
     const handleShare = () => {
@@ -201,11 +231,94 @@ export default function ProductPage() {
                 <div style={styles.leftColumn}>
 
                     <div style={styles.imageContainer}>
-                        <img
-                            src={product.image}
-                            alt={product.title}
-                            style={styles.image}
-                        />
+
+                        {/* IMAGE PRINCIPALE */}
+                        {imagesList.length > 0 ? (
+                            <div style={{ position: "relative" }}>
+
+                                <img
+                                    src={imagesList[currentIndex]}
+                                    alt={product.title}
+                                    style={styles.image}
+                                />
+
+                                {/* FLÈCHE GAUCHE */}
+                                {imagesList.length > 1 && (
+                                    <button
+                                        onClick={prevImage}
+                                        style={{
+                                            position: "absolute",
+                                            left: "10px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            background: "rgba(0,0,0,0.5)",
+                                            color: "#fff",
+                                            border: "none",
+                                            borderRadius: "50%",
+                                            width: "35px",
+                                            height: "35px",
+                                            cursor: "pointer"
+                                        }}
+                                    >
+                                        ‹
+                                    </button>
+                                )}
+
+                                {/* FLÈCHE DROITE */}
+                                {imagesList.length > 1 && (
+                                    <button
+                                        onClick={nextImage}
+                                        style={{
+                                            position: "absolute",
+                                            right: "10px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            background: "rgba(0,0,0,0.5)",
+                                            color: "#fff",
+                                            border: "none",
+                                            borderRadius: "50%",
+                                            width: "35px",
+                                            height: "35px",
+                                            cursor: "pointer"
+                                        }}
+                                    >
+                                        ›
+                                    </button>
+                                )}
+
+                            </div>
+                        ) : (
+                            <div style={styles.noImage}>📷 Aucune image</div>
+                        )}
+
+                        {/* MINIATURES */}
+                        {imagesList.length > 1 && (
+                            <div style={{
+                                display: "flex",
+                                gap: "8px",
+                                marginTop: "10px",
+                                flexWrap: "wrap"
+                            }}>
+                                {imagesList.map((img, index) => (
+                                    <img
+                                        key={index}
+                                        src={img}
+                                        onClick={() => setCurrentIndex(index)}
+                                        style={{
+                                            width: "60px",
+                                            height: "60px",
+                                            objectFit: "cover",
+                                            borderRadius: "8px",
+                                            cursor: "pointer",
+                                            border: currentIndex === index
+                                                ? "2px solid #2563eb"
+                                                : "1px solid #ddd"
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
                     </div>
 
                     {/* INFOS DE L'ANNONCE */}
