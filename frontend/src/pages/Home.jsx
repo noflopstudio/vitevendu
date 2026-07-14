@@ -902,10 +902,13 @@ export default function Home({ ads = [], user, profile }) {
                     {/* ================= FOOTER ================= */}
                     <footer style={styles.footer}>
                         <div style={styles.footerLinksRow}>
-                            <button onClick={() => handleNavClick("contact")} style={styles.footerLink}>Contact</button>
-                            <button onClick={() => handleNavClick("conditions")} style={styles.footerLink}>Conditions générales</button>
-                            <button onClick={() => handleNavClick("about")} style={styles.footerLink}>À propos</button>
-                            <button onClick={() => handleNavClick("blog")} style={styles.footerLink}>Blog</button>
+                            <button onClick={() => handleNavClick("contact")} style={styles.footerLink}> Contact </button>
+                            <button onClick={() => handleNavClick("conditions")} style={styles.footerLink}> Conditions générales </button>
+                            <button onClick={() => handleNavClick("about")} style={styles.footerLink}> À propos </button>
+                            <button onClick={() => handleNavClick("blog")} style={styles.footerLink}> Blog </button>
+                            <button onClick={() => handleNavClick("how-it-works")} style={styles.footerLink}> Comment ça marche </button>
+                            <button onClick={() => handleNavClick("faq")} style={styles.footerLink}> FAQ </button>
+                            <button onClick={() => handleNavClick("security")} style={styles.footerLink}> Sécurité </button>
                         </div>
                         <div style={styles.copyrightText}>
                             © 2026 ViteVendu. Tous droits réservés.

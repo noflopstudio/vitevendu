@@ -35,23 +35,54 @@ self.addEventListener("activate", (event) => {
     self.clients.claim();
 });
 
+
 // FETCH
 self.addEventListener("fetch", (event) => {
+
     if (event.request.method !== "GET") return;
 
+
     event.respondWith(
+
         fetch(event.request)
+
             .then((response) => {
+
+
+                // Bloque les réponses partielles 206
+                if (
+                    response.status === 206 ||
+                    response.type === "opaque"
+                ) {
+                    return response;
+                }
+
+
                 const clone = response.clone();
 
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, clone);
-                });
+
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+
+                        cache.put(
+                            event.request,
+                            clone
+                        );
+
+                    });
+
 
                 return response;
+
             })
+
+
             .catch(() => {
+
                 return caches.match(event.request);
+
             })
+
     );
+
 });

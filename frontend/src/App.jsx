@@ -14,6 +14,11 @@ import Analytics from "./admin/analytics/Analytics";
 import Profile from "./pages/Profile";
 import InstallGuide from "./pages/InstallGuide";
 
+import HowItWorks from "./pages/HowItWorks";
+import SecurityPage from "./pages/Security";
+import FAQ from "./pages/FAQ";
+
+
 import SellerDashboard from "./pages/SellerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import ProductPage from "./pages/ProductPage";
@@ -991,6 +996,10 @@ export default function App() {
           <Route path="/report" element={<ReportScam />} />
           <Route path="/install" element={<InstallGuide />} />
           <Route path="/install-guide" element={<InstallGuide />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/security" element={<SecurityPage />} />
+          <Route path="/faq" element={<FAQ />} />
+
 
           <Route path="/client" element={<ClientDashboard />} />
           <Route path="/product/:id" element={<ProductPage />} />
