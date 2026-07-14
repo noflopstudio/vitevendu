@@ -974,8 +974,8 @@ const styles = {
 
     /* ===== FOOTER ===== */
     footer: { textAlign: "center", padding: "40px 0 20px 0", borderTop: "1px solid #f1f5f9", marginTop: "48px" },
-    footerLinksRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: "12px", flexWrap: "wrap", marginBottom: "16px" },
-    footerLink: { background: "none", border: "none", color: "#475569", fontSize: "13px", fontWeight: "600", padding: "6px 8px", cursor: "pointer", whiteSpace: "nowrap", transition: "color 0.15s ease" },
+    footerLinksRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: "4px 10px", flexWrap: "wrap", marginBottom: "12px" },
+    footerLink: { background: "none", border: "none", color: "#475569", fontSize: "13px", fontWeight: "600", padding: "2px 4px", cursor: "pointer", whiteSpace: "nowrap", transition: "color 0.15s ease" },
     copyrightText: { fontSize: "11px", color: "#94a3b8" }, style: {
         width: "200px",
         height: "auto",

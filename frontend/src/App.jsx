@@ -867,36 +867,46 @@ export default function App() {
   };
   // ================= INIT =================
   useEffect(() => {
-    const init = async () => {
-      // 🔥 1. force refresh session (IMPORTANT)
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.refreshSession();
 
-      if (sessionError) {
-        console.log("Session refresh error:", sessionError);
-      }
+    const init = async () => {
 
       await fetchAds();
 
-      // 🔥 2. récup session propre
-      const { data } = await supabase.auth.getSession();
+
+      // Récupérer la session existante
+      const { data, error } = await supabase.auth.getSession();
+
+
+      if (error) {
+        console.log("Session error:", error);
+      }
+
 
       if (data.session?.user) {
+
         const user = data.session.user;
 
         setUser(user);
+
         await fetchUserProfile(user.id);
+
       } else {
+
         setUser(null);
         setProfile(null);
+
       }
 
+
       setLoading(false);
+
     };
 
-    init();
-  }, []);
 
+    init();
+
+
+  }, []);
   if (loading) {
 
     return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", fontFamily: "'Inter', sans-serif" }}>Chargement...</div>;
