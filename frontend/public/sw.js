@@ -1,4 +1,4 @@
-const CACHE_NAME = "vitevendu-v3";
+const CACHE_NAME = "vitevendu-v4";
 
 const STATIC_ASSETS = [
     "/",
