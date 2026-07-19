@@ -1,4 +1,4 @@
-const CACHE_NAME = "vitevendu-v2";
+const CACHE_NAME = "vitevendu-v3";
 
 const STATIC_ASSETS = [
     "/",
@@ -41,13 +41,16 @@ self.addEventListener("fetch", (event) => {
 
     if (event.request.method !== "GET") return;
 
+    // Ne pas gérer les vidéos avec le Service Worker
+    if (event.request.url.includes(".mp4")) {
+        return;
+    }
 
     event.respondWith(
 
         fetch(event.request)
 
             .then((response) => {
-
 
                 // Bloque les réponses partielles 206
                 if (
@@ -57,29 +60,38 @@ self.addEventListener("fetch", (event) => {
                     return response;
                 }
 
-
                 const clone = response.clone();
-
 
                 caches.open(CACHE_NAME)
                     .then((cache) => {
-
                         cache.put(
                             event.request,
                             clone
                         );
-
                     });
-
 
                 return response;
 
             })
 
-
             .catch(() => {
 
-                return caches.match(event.request);
+                return caches.match(event.request)
+                    .then((cachedResponse) => {
+
+                        if (cachedResponse) {
+                            return cachedResponse;
+                        }
+
+                        return new Response(
+                            "Offline",
+                            {
+                                status: 503,
+                                statusText: "Service unavailable"
+                            }
+                        );
+
+                    });
 
             })
 
