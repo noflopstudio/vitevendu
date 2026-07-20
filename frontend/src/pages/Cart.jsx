@@ -53,7 +53,10 @@ export default function Cart({ user }) {
                     size: item.size || item.pointure || null,
                     clothSize: item.clothSize || null,
                     color: item.color || null,
-                    image: item.image || null
+                    image:
+                        item.image ||
+                        item.images?.[0] ||
+                        null
                 }));
 
                 // SHIPPING

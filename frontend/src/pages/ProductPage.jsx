@@ -182,15 +182,25 @@ export default function ProductPage() {
         ? "Pointures disponibles"
         : "Tailles disponibles";
 
+
     const buildCartItem = () => {
         return {
             ...product,
+
+            // image principale pour le panier
+            image:
+                product.image ||
+                product.images?.[0] ||
+                null,
+
+            images:
+                product.images || [],
+
             size: needsSize ? (selectedSize || null) : null,
             color: selectedColor || null,
             quantity: 1
         };
     };
-
     const handleAddToCart = () => {
         if (needsSize && !selectedSize) {
             alert(
