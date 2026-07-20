@@ -128,7 +128,7 @@ function ProductCard({ ad, navigate }) {
                     <div style={styles.noImage}>📷 Pas de visuel</div>
                 )}
 
-                {/* BADGE PROMO */}
+
                 {oldPrice > currentPrice && currentPrice > 0 && (
                     <div
                         style={{
@@ -150,7 +150,7 @@ function ProductCard({ ad, navigate }) {
                 )}
             </div>
 
-            {/* CONTENU CARTE */}
+
             <div style={styles.cardBody}>
                 <div style={styles.cardHeader}>
                     <h3 style={styles.cardTitle}>
@@ -222,7 +222,7 @@ export default function Home({ ads = [], user, profile }) {
                 id: user.id,
                 email: user.email,
                 username: user.email?.split("@")[0] || "user",
-                role: "client", // ✅ TOUJOURS client au début
+                role: "client", // 
                 subscription_status: "active"
             });
 
@@ -468,7 +468,7 @@ export default function Home({ ads = [], user, profile }) {
                             Télécharger
                         </Link>
 
-                        {/* BOUTON CONNEXION */}
+
                         {!user && (
                             <button
                                 onClick={() => navigate("/login")}
@@ -490,13 +490,13 @@ export default function Home({ ads = [], user, profile }) {
                 </div>
             </header>
 
-            {/* 🔥 MENU */}
+
             <MobileMenu user={user} profile={profile} />
 
-            {/* ================= MAIN CONTENT ================= */}
+
             <main style={styles.mainContent}>
 
-                {/* 👇 POPUP ICI (OK) */}
+
                 <InstallPopup />
 
                 <div style={styles.container}>
@@ -523,7 +523,7 @@ export default function Home({ ads = [], user, profile }) {
             }
         `}</style>
 
-                    {/* HEADER */}
+
                     <div style={{
                         position: "sticky",
                         top: 0,
@@ -645,7 +645,7 @@ export default function Home({ ads = [], user, profile }) {
                                                 style={{
                                                     ...styles.pubImage,
                                                     animation: "promoFloat 4s ease-in-out infinite",
-                                                    transition: "all 0.3s ease" // Assure la fluidité du mouvement
+                                                    transition: "all 0.3s ease"
                                                 }}
                                             />
                                         ) : (
@@ -663,7 +663,7 @@ export default function Home({ ads = [], user, profile }) {
                                             <h2 style={styles.pubTitle}>{middlePromo.title}</h2>
                                         </div>
 
-                                        {/* Injection correcte de l'animation CSS en React */}
+
                                         <style dangerouslySetInnerHTML={{
                                             __html: `
         @keyframes promoFloat {
@@ -680,7 +680,7 @@ export default function Home({ ads = [], user, profile }) {
     `}} />
                                     </div>
 
-                                    {/* ANNONCES 8 À 21 */}
+
                                     <div id="plus-offres" style={styles.categoryBlock}>
                                         <h2 style={styles.categoryTitle}>🛍️ Plus de produits</h2>
 
@@ -694,7 +694,7 @@ export default function Home({ ads = [], user, profile }) {
                                             ))}
                                         </div>
                                     </div>
-                                    {/* ================= BLOC PREMIUM VITEVENDU ================= */}
+
                                     <div
                                         style={{
                                             margin: "40px 0",
@@ -876,7 +876,7 @@ export default function Home({ ads = [], user, profile }) {
                                         </div>
                                     </div>
 
-                                    {/* ANNONCES APRÈS */}
+
                                     {remainingAds.length > 0 && (
                                         <div id="plus-offres" style={styles.categoryBlock}>
                                             <h2 style={styles.categoryTitle}>
@@ -899,7 +899,7 @@ export default function Home({ ads = [], user, profile }) {
                         </>
                     )}
 
-                    {/* ================= FOOTER ================= */}
+
                     <footer style={styles.footer}>
                         <div style={styles.footerLinksRow}>
                             <button onClick={() => handleNavClick("contact")} style={styles.footerLink}> Contact </button>
@@ -941,7 +941,7 @@ const styles = {
     heroTitleWrapper: { fontSize: "26px", fontWeight: "800", margin: "0 0 12px 0", lineHeight: "1.2", minHeight: "70px" },
     heroSubtitle: { fontSize: "14px", color: "#64748b", margin: 0, lineHeight: "1.5" },
 
-    /* ===== SECTION RECHERCHE ===== */
+
     searchContainer: { width: "100%", maxWidth: "680px", margin: "0 auto 40px auto", padding: "0 10px", boxSizing: "border-box" },
     searchBarWrapper: { display: "flex", alignItems: "center", background: "#ffffff", borderRadius: "16px", padding: "6px 16px", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.01)", border: "1px solid #e2e8f0", position: "relative" },
     searchIcon: { fontSize: "18px", marginRight: "12px", color: "#94a3b8", userSelect: "none" },
@@ -949,12 +949,12 @@ const styles = {
     clearSearchBtn: { background: "#f1f5f9", border: "none", color: "#64748b", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: "11px", fontWeight: "bold", padding: 0, marginLeft: "10px", transition: "background 0.2s ease" },
     emptyState: { textAlign: "center", padding: "50px 20px", background: "#ffffff", borderRadius: "20px", border: "1px dashed #cbd5e1", margin: "30px auto", maxWidth: "500px", boxSizing: "border-box" },
 
-    /* ===== COINS CATEGORIES & GRIDS ===== */
+
     categoryBlock: { marginBottom: "32px" },
     categoryTitle: { fontSize: "18px", fontWeight: "800", color: "#0f172a", margin: "0 0 8px 0", paddingBottom: "4px", borderBottom: "1px solid #f1f5f9" },
     grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginTop: "8px" },
 
-    /* ===== CARDS AD ===== */
+
     card: { background: "#ffffff", borderRadius: "12px", overflow: "hidden", border: "1px solid #f1f5f9", display: "flex", flexDirection: "column", transition: "transform 0.2s ease, box-shadow 0.2s ease" },
     imageWrapper: { width: "100%", height: "150px", background: "#f8fafc", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", borderRadius: "12px" },
     cardImage: { width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.25s ease" },
@@ -969,10 +969,10 @@ const styles = {
     cardDesc: { fontSize: "11px", color: "#64748b", margin: "4px 0 0 0", display: "-webkit-box", WebkitLineClamp: "2", WebkitBoxOrient: "vertical", overflow: "hidden", height: "32px", lineHeight: "1.4" },
     chatBtn: { marginTop: "10px", width: "100%", background: "#22c55e", color: "#ffffff", border: "none", padding: "6px", borderRadius: "6px", fontWeight: "600", fontSize: "12px", cursor: "pointer" },
 
-    /* ===== AJOUT : STYLE BOUTON PANIER ===== */
+
     cartBtn: { width: "100%", marginTop: "10px", padding: "10px", border: "none", borderRadius: "10px", background: "#10b981", color: "#fff", fontWeight: "600", cursor: "pointer", fontSize: "12px" },
 
-    /* ===== FOOTER ===== */
+
     footer: { textAlign: "center", padding: "40px 0 20px 0", borderTop: "1px solid #f1f5f9", marginTop: "48px" },
     footerLinksRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: "4px 10px", flexWrap: "wrap", marginBottom: "12px" },
     footerLink: { background: "none", border: "none", color: "#475569", fontSize: "13px", fontWeight: "600", padding: "2px 4px", cursor: "pointer", whiteSpace: "nowrap", transition: "color 0.15s ease" },

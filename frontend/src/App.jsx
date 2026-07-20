@@ -93,7 +93,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       )
     );
   };
-  /* ===== PROTECTION ABONNEMENT (MODIFIÉE POUR LE DEV) ===== */
+
   const isPaid = true;
   const isExpired = false;
 
@@ -143,13 +143,13 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   useEffect(() => {
     const checkUserStatus = async () => {
       try {
-        // 🔥 1. récupérer session propre
+
         const { data: sessionData } = await supabase.auth.getSession();
         const user = sessionData?.session?.user;
 
         if (!user) return;
 
-        // 🔥 2. requête profile sécurisée
+
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("status")
@@ -161,7 +161,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           return;
         }
 
-        // 🔥 3. blocage
+
         if (profile?.status === "blocked") {
           setBlocked(true);
           await supabase.auth.signOut();
@@ -224,20 +224,20 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     );
   }
 
-  /* ===== LOGOUT ===== */
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
 
-  /* ===== ACTION ÉDITION ===== */
+
   const startEdit = (ad) => {
     setEditingAdId(ad.id);
     setTitle(ad.title);
     setPrice(ad.price.toString());
     setOldPrice(ad.old_price ? ad.old_price.toString() : "");
     setDescription(ad.description || "");
-    setImages([]); // On reset l'input image (on garde l'ancienne en BDD sauf si nouvelle sélectionnée)
+    setImages([]);
   };
 
   const cancelEdit = () => {
@@ -249,7 +249,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
     setImages([]);
   };
 
-  /* ===== ACTION SUPPRESSION ===== */
+
   const handleDelete = async (adId) => {
     if (window.confirm("Voulez-vous vraiment supprimer cette annonce ?")) {
       await supabase.from("ads").delete().eq("id", adId);
@@ -299,11 +299,11 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       }
     }
 
-    // NORMALISATION DES PRIX
+
     const priceValue = Number(price);
     const oldPriceValue = oldPrice ? Number(oldPrice) : null;
 
-    // UPDATE MODE
+
     if (editingAdId) {
       const { error } = await supabase
         .from("ads")
@@ -324,7 +324,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       }
     }
 
-    // INSERT MODE
+
     else {
 
       const { error } = await supabase.from("ads").insert([
@@ -347,7 +347,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       }
     }
 
-    // RESET PROPRE
+
     setEditingAdId(null);
     setTitle("");
     setPrice("");
@@ -386,7 +386,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
   return (
     <div style={styles.dashboardLayout}>
 
-      {/* BOUTON RETOUR RAPIDE À L'ACCUEIL DEPUIS LE DASHBOARD */}
+
       <Link
         to="/"
         style={{
@@ -408,7 +408,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
         🏠 Retour au site
       </Link>
 
-      {/* BOUTON MESSAGES */}
+
       <Link
         to="/messages"
         style={{
@@ -429,7 +429,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
         💬 Messages
       </Link>
 
-      {/* ===================== SIDEBAR ===================== */}
+
       <aside style={styles.sidebar}>
         <div style={{
           background: "#e8f5e9",
@@ -445,7 +445,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
           Les images floues ou non conformes peuvent être supprimées.
         </div>
 
-        {/* USER CARD */}
+
         <div style={styles.userCard}>
           <div style={styles.avatarContainer}>
             <label style={styles.avatarLabel}>
@@ -486,7 +486,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
             </div>
           </div>
         </div>
-        {/* ================= FORMULAIRE ================= */}
+
         <div style={styles.sidebarModule}>
           <h4 style={styles.moduleTitle}>
             {editingAdId ? "Modifier l'Annonce" : "Nouvelle Publication"}
@@ -550,7 +550,6 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               <option value="other">Autres</option>
             </select>
 
-            {/* ================= VARIANTS PRO ================= */}
             <div
               style={{
                 marginTop: 12,
@@ -581,7 +580,6 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               <h4 style={{ fontSize: 13, marginTop: 12 }}>
                 Tailles / Pointures
               </h4>
-
               <input
                 style={styles.sidebarInput}
                 placeholder="Ex: S, M, L ou 38, 39, 40"
@@ -589,7 +587,8 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                   setVariants((prev) => ({
                     ...prev,
                     sizes: e.target.value
-                      .split(",")
+                      .replace(/,/g, " ")
+                      .split(/\s+/)
                       .map((s) => s.trim())
                       .filter(Boolean),
                   }))
@@ -610,7 +609,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               />
             </div>
 
-            {/* IMAGES */}
+
             <label style={styles.uploadZone}>
               📷 {images.length > 0
                 ? `${images.length} image(s) sélectionnée(s)`
@@ -666,7 +665,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
       </aside>
 
 
-      {/* ===================== MAIN ===================== */}
+
       <main style={styles.mainContent}>
         <div style={styles.viewPort}>
 
@@ -695,7 +694,6 @@ function Dashboard({ user, profile, ads, fetchAds }) {
               {myAds.map((ad) => (
                 <div key={ad.id} style={styles.cleanCard}>
 
-                  {/* Conteneur d'image */}
                   <div style={styles.cardImageContainer}>
                     {ad.images && ad.images.length > 0 ? (
                       <img
@@ -716,7 +714,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
 
                   <div style={styles.cardBody}>
 
-                    {/* Ligne d'en-tête de la carte avec Titre et Prix alignés */}
+
                     <div style={styles.cardHeaderRow}>
                       <h3 style={styles.cardTitle}>{ad.title}</h3>
                       <span style={styles.cardPrice}>
@@ -724,10 +722,9 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                       </span>
                     </div>
 
-                    {/* Description du produit */}
                     <p style={styles.cardDescription}>{ad.description}</p>
 
-                    {/* Section du bas : Variantes et Boutons d'action */}
+
                     <div style={styles.cardFooter}>
                       {Array.isArray(ad.variants) && ad.variants.length > 0 && (
                         <p style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginTop: 0, marginBottom: "14px", display: "flex", alignItems: "center", gap: "4px" }}>
@@ -740,7 +737,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                           onClick={() => startEdit(ad)}
                           style={styles.btnIconEdit}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#4338ca"; // Indigo plus foncé au survol
+                            e.currentTarget.style.background = "#4338ca";
                             e.currentTarget.style.transform = "translateY(-1px)";
                           }}
                           onMouseLeave={(e) => {
@@ -755,7 +752,7 @@ function Dashboard({ user, profile, ads, fetchAds }) {
                           onClick={() => handleDelete(ad.id)}
                           style={styles.btnIconDelete}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#fee2e2"; // Fond rouge plus intense au survol
+                            e.currentTarget.style.background = "#fee2e2";
                             e.currentTarget.style.borderColor = "#fca5a5";
                           }}
                           onMouseLeave={(e) => {
@@ -792,8 +789,6 @@ export default function App() {
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
 
 
-
-  // ================= ADS =================
   const fetchAds = async () => {
     const { data, error } = await supabase
       .from("ads")
@@ -809,7 +804,7 @@ export default function App() {
   };
 
 
-  // ================= PROFILE =================
+
   const fetchUserProfile = async (userId) => {
     if (!userId) return;
 
@@ -827,7 +822,7 @@ export default function App() {
 
     setProfile(data || null);
 
-    // 🔥 important: sync role ici
+
     setSubscriptionStatus(data?.subscription_status || null);
   };
 
@@ -865,7 +860,7 @@ export default function App() {
 
     navigateTo("/dashboard");
   };
-  // ================= INIT =================
+
   useEffect(() => {
 
     const init = async () => {
@@ -873,7 +868,7 @@ export default function App() {
       await fetchAds();
 
 
-      // Récupérer la session existante
+
       const { data, error } = await supabase.auth.getSession();
 
 
@@ -968,7 +963,7 @@ export default function App() {
     <Router>
       <div id="root" style={{ position: "relative" }}>
 
-        {/* 🔔 NOTIFICATION GLOBALE */}
+
         {showReminder && (
           <div style={{
             position: "fixed",
@@ -991,7 +986,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ================= ROUTES ================= */}
+
         <Routes>
           <Route path="/" element={<Home ads={ads} user={user} profile={profile} />} />
           <Route path="/about" element={<About />} />
@@ -1031,27 +1026,27 @@ export default function App() {
           <Route path="/admin/analytics" element={<Analytics />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/reports" element={<AdminReports />} />
-          {/* USERS & ROLES */}
+
           <Route path="/users/roles" element={<Roles />} />
           <Route path="/admin/reports" element={<AdminReports />} />
 
 
-          {/* ORDERS */}
+
           <Route path="/admin/orders" element={<OrdersAll />} />
           <Route path="/admin/orders/pending" element={<OrdersPending />} />
           <Route path="/admin/orders/paid" element={<OrdersPaid />} />
           <Route path="/admin/orders/shipping" element={<OrdersShipping />} />
 
-          {/* BUSINESS */}
+
           <Route path="/admin/sales" element={<Sales />} />
           <Route path="/admin/revenue" element={<Revenue />} />
           <Route path="/admin/stats" element={<Stats />} />
 
-          {/* STORE */}
+
           <Route path="/admin/products" element={<Products />} />
           <Route path="/admin/categories" element={<Categories />} />
 
-          {/* SYSTEM */}
+
           <Route path="/admin/security" element={<Security />} />
 
           <Route path="/admin/users" element={<Users />} />
@@ -1129,7 +1124,7 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
             handleLoginSubmit(e, navigate, isSignUpMode)
           }
         >
-          {/* EMAIL */}
+
           <input
             style={styles.proInput}
             type="email"
@@ -1139,7 +1134,7 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
             required
           />
 
-          {/* PASSWORD WITH TOGGLE */}
+
           <div style={{ position: "relative", width: "100%" }}>
             <input
               style={styles.proInput}
@@ -1166,7 +1161,7 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
             </span>
           </div>
 
-          {/* BUTTON */}
+
           <button
             type="submit"
             style={{
@@ -1181,7 +1176,7 @@ function LoginView({ email, setEmail, password, setPassword, handleLoginSubmit }
           </button>
         </form>
 
-        {/* SWITCH MODE */}
+
         <div style={{ marginTop: "24px", textAlign: "center" }}>
           <button
             type="button"
@@ -1345,7 +1340,7 @@ const styles = {
     borderRadius: "12px",
     border: "1px solid #e2e8f0",
     background: "#f8fafc",
-    color: "#111827", // ✅ AJOUT IMPORTANT
+    color: "#111827",
     fontSize: "14px",
     minHeight: "120px",
     maxHeight: "300px",
@@ -1385,9 +1380,9 @@ const styles = {
     flexDirection: "column", boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.06)",
     border: "1px solid rgba(241, 245, 249, 0.9)", width: "100%", boxSizing: "border-box"
   },
-  /* ===== MODIFICATION ICI ===== */
+
   cardImageContainer: {
-    height: "130px", // Réduit de 190px à 130px pour un format plus équilibré et compact
+    height: "130px",
     background: "#f1f5f9",
     position: "relative",
     width: "100%"
@@ -1395,7 +1390,7 @@ const styles = {
   cardImg: {
     width: "100%",
     height: "100%",
-    objectFit: "cover" // Recadre proprement sans déformer le visuel
+    objectFit: "cover"
   },
 
 

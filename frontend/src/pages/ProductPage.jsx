@@ -1,7 +1,8 @@
-// 1. LES IMPORTS TOUJOURS TOUT EN HAUT DU FICHIER 
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
+
 
 export default function ProductPage() {
     const { id } = useParams();
@@ -42,23 +43,19 @@ export default function ProductPage() {
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");
 
-    // --- ÉTATS POUR LA GESTION DES AVIS ---
+
     const [localReviews, setLocalReviews] = useState(
         Array.isArray(product?.reviews) ? product.reviews : []
     );
     const [newAuthor, setNewAuthor] = useState("");
-    const [newRating, setNewRating] = useState(5); // Note par défaut à 5
+    const [newRating, setNewRating] = useState(5);
     const [newComment, setNewComment] = useState("");
 
-    // Validation basée sur le type de produit
-    const isShoes = product?.type === "shoes";
-    const isClothes = product?.type === "clothes";
-    const needsSize = isShoes || isClothes;
 
-    // Calcul dynamique du panier
+
     const cartCount = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
 
-    // Récupération et calcul des avis basés sur l'état local
+
     const hasReviews = localReviews.length > 0;
     const averageRating = hasReviews
         ? (localReviews.reduce((acc, rev) => acc + rev.rating, 0) / localReviews.length).toFixed(1)
@@ -85,7 +82,7 @@ export default function ProductPage() {
         );
     };
 
-    // Partage propre de l'annonce
+
     const handleShare = () => {
         if (navigator.share) {
             navigator.share({
@@ -99,7 +96,7 @@ export default function ProductPage() {
         }
     };
 
-    // Soumission du nouvel avis client
+
     const handleSubmitReview = (e) => {
         e.preventDefault();
 
@@ -109,7 +106,7 @@ export default function ProductPage() {
         }
 
         const newReviewObj = {
-            id: Date.now().toString(), // ID unique temporaire
+            id: Date.now().toString(),
             author: newAuthor,
             rating: Number(newRating),
             comment: newComment,
@@ -120,18 +117,17 @@ export default function ProductPage() {
             })
         };
 
-        // Mise à jour de l'affichage local des avis
+
         setLocalReviews([newReviewObj, ...localReviews]);
 
-        // Réinitialisation du formulaire
+
         setNewAuthor("");
         setNewComment("");
         setNewRating(5);
 
         alert("Merci ! Votre avis a été publié avec succès. ⭐");
 
-        // TODO: Ici, tu pourras ajouter ton appel API / Supabase 
-        // pour sauvegarder l'avis en base de données de manière persistante.
+
     };
 
     if (!product) {
@@ -151,28 +147,40 @@ export default function ProductPage() {
     let sizes = [];
 
     try {
-        // Les tailles sont enregistrées dans product.variants.sizes
-        if (product?.variants?.sizes) {
-            sizes =
-                typeof product.variants.sizes === "string"
-                    ? JSON.parse(product.variants.sizes)
-                    : product.variants.sizes;
+        if (variants?.sizes) {
+            sizes = variants.sizes;
         }
     } catch (e) {
         sizes = [];
     }
 
-    // Aucune taille automatique.
-    // On affiche uniquement celles saisies par le vendeur.
+    if (typeof sizes === "string") {
+        sizes = sizes.split(",").map((s) => s.trim()).filter(Boolean);
+    }
+
+    if (Array.isArray(sizes) && sizes.length === 1 && sizes[0].includes(",")) {
+        sizes = sizes[0].split(",").map((s) => s.trim()).filter(Boolean);
+    }
+
     if (!Array.isArray(sizes)) {
         sizes = [];
     }
 
+    const isShoes = product?.type === "shoes";
+    const isClothes = product?.type === "clothes";
+    const needsSize = sizes.length > 0;
+
+    console.log("Produit complet :", product);
+    console.log("Variantes :", variants);
+    console.log("Tailles reçues :", variants?.sizes);
+    console.log("Sizes final :", sizes);
+
+    console.log("sizes =", sizes);
+    console.log("type =", product?.type);
+
     const titleLabel = isShoes
         ? "Pointures disponibles"
-        : isClothes
-            ? "Tailles disponibles"
-            : "Options disponibles";
+        : "Tailles disponibles";
 
     const buildCartItem = () => {
         return {
@@ -213,7 +221,7 @@ export default function ProductPage() {
     return (
         <div style={styles.pageWrapper}>
 
-            {/* HEADER */}
+
             <header style={styles.header}>
                 <button onClick={() => navigate("/")} style={styles.backBtn}>
                     ← Boutique
@@ -224,15 +232,15 @@ export default function ProductPage() {
                 </button>
             </header>
 
-            {/* LAYOUT */}
+
             <main style={styles.mainLayout}>
 
-                {/* COLONNE GAUCHE */}
+
                 <div style={styles.leftColumn}>
 
                     <div style={styles.imageContainer}>
 
-                        {/* IMAGE PRINCIPALE */}
+
                         {imagesList.length > 0 ? (
                             <div style={{ position: "relative" }}>
 
@@ -242,7 +250,7 @@ export default function ProductPage() {
                                     style={styles.image}
                                 />
 
-                                {/* FLÈCHE GAUCHE */}
+
                                 {imagesList.length > 1 && (
                                     <button
                                         onClick={prevImage}
@@ -264,7 +272,7 @@ export default function ProductPage() {
                                     </button>
                                 )}
 
-                                {/* FLÈCHE DROITE */}
+
                                 {imagesList.length > 1 && (
                                     <button
                                         onClick={nextImage}
@@ -291,7 +299,7 @@ export default function ProductPage() {
                             <div style={styles.noImage}>📷 Aucune image</div>
                         )}
 
-                        {/* MINIATURES */}
+
                         {imagesList.length > 1 && (
                             <div style={{
                                 display: "flex",
@@ -321,7 +329,7 @@ export default function ProductPage() {
 
                     </div>
 
-                    {/* INFOS DE L'ANNONCE */}
+
                     <div style={styles.announcementDetailsCard}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span style={styles.categoryTag}>{product.category || "Annonce ViteVendu"}</span>
@@ -332,7 +340,7 @@ export default function ProductPage() {
 
                         <h1 style={styles.announcementTitle}>{product.title}</h1>
 
-                        {/* Note globale réelle recalculée */}
+
                         {hasReviews && (
                             <div style={styles.ratingSummaryRow}>
                                 <span style={styles.starIcon}>⭐</span>
@@ -348,7 +356,7 @@ export default function ProductPage() {
                             </span>
                         </div>
 
-                        {/* CARACTÉRISTIQUES RÉELLES */}
+
                         <div style={{ marginTop: "24px" }}>
                             <h3 style={styles.sectionTitle}>Fiche descriptive</h3>
 
@@ -400,7 +408,7 @@ export default function ProductPage() {
                             </table>
                         </div>
 
-                        {/* DESCRIPTION */}
+
                         <div style={styles.descriptionBox}>
                             <h3 style={styles.sectionTitle}>Description détaillée</h3>
                             <p style={styles.descriptionText}>
@@ -484,7 +492,7 @@ export default function ProductPage() {
                             </div>
                         )}
 
-                        {/* --- NOUVELLE SECTION : FORMULAIRE LAISSER UN AVIS --- */}
+
                         <div style={styles.reviewFormContainer}>
                             <h3 style={styles.sectionTitle}>Donner votre avis</h3>
                             <form onSubmit={handleSubmitReview} style={styles.reviewForm}>
@@ -535,7 +543,6 @@ export default function ProductPage() {
                             </form>
                         </div>
 
-                        {/* SECTION DES AVIS CLIENTS */}
                         <div style={styles.reviewsSection}>
                             <h3 style={styles.sectionTitle}>Avis des clients</h3>
 
@@ -568,7 +575,7 @@ export default function ProductPage() {
 
                 </div>
 
-                {/* COLONNE DROITE : TUNNEL D'ACHAT */}
+
                 <div style={styles.rightColumn}>
                     <div style={styles.infoBox}>
 
@@ -579,7 +586,7 @@ export default function ProductPage() {
                             </h2>
                         </div>
 
-                        {/* CHOIX DES TAILLES */}
+
                         {needsSize && (
                             <div style={{ marginTop: 20 }}>
                                 <h3 style={styles.sectionTitle}>{titleLabel}</h3>
@@ -589,13 +596,27 @@ export default function ProductPage() {
                                         return (
                                             <button
                                                 key={size}
-                                                onClick={() => setSelectedSize(size)}
+                                                onClick={() =>
+                                                    setSelectedSize(
+                                                        selectedSize === size ? "" : size
+                                                    )
+                                                }
                                                 style={{
                                                     ...styles.sizeBtn,
-                                                    background: isSelected ? "#2563eb" : "#fff",
-                                                    color: isSelected ? "#fff" : "#0f172a",
-                                                    borderColor: isSelected ? "#2563eb" : "#cbd5e1",
-                                                    fontWeight: isSelected ? "700" : "500"
+                                                    background:
+                                                        selectedSize === size
+                                                            ? "#2563eb"
+                                                            : "#fff",
+
+                                                    color:
+                                                        selectedSize === size
+                                                            ? "#fff"
+                                                            : "#0f172a",
+
+                                                    borderColor:
+                                                        selectedSize === size
+                                                            ? "#2563eb"
+                                                            : "#cbd5e1"
                                                 }}
                                             >
                                                 {size}
@@ -606,7 +627,7 @@ export default function ProductPage() {
                             </div>
                         )}
 
-                        {/* ACTIONS */}
+
                         <div style={styles.actionBox}>
                             <button onClick={handleAddToCart} style={styles.cartBtn}>
                                 Ajouter au panier
@@ -617,7 +638,6 @@ export default function ProductPage() {
                             </button>
                         </div>
 
-                        {/* INFOS LIVRAISON PRATIQUES */}
                         <div style={styles.guaranteesBox}>
                             <div style={styles.guaranteeItem}>
                                 <span style={{ fontSize: "18px" }}>🚚</span>
@@ -635,7 +655,7 @@ export default function ProductPage() {
                             </div>
                         </div>
 
-                        {/* BLOC VENDEUR TRANSPARENT */}
+
                         <div style={styles.sellerBox}>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
                                 <span style={{ fontSize: "18px" }}>🏪</span>
@@ -845,20 +865,26 @@ const styles = {
     },
     sizeContainer: {
         display: "flex",
-        gap: "8px",
-        flexWrap: "wrap"
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "12px",
+        marginTop: "10px",
+        flexWrap: "wrap",
     },
+
     sizeBtn: {
-        border: "1px solid",
+        border: "1px solid #cbd5e1",
         width: "48px",
-        height: "48px",
-        borderRadius: "12px",
+        height: "45px",
+        borderRadius: "10px",
         cursor: "pointer",
         fontSize: "14px",
+        fontWeight: "600",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        transition: "all 0.15s ease"
+        flexShrink: 0,
+        transition: "all .2s ease",
     },
     descriptionBox: {
         marginTop: "24px",
